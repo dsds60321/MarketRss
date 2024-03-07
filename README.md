@@ -3,8 +3,6 @@
 ```text
 계정 : dsds60321@gmail.com
 pw : !asd465656
-
-Token : PcPhOlstzaDu8RrT6CdF1nlMhkOHcfKEMzw6gUeU
 ```
 
 1. 미국 주식 선택 (미 개발)
