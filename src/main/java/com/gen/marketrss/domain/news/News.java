@@ -28,7 +28,7 @@ public class News {
     private String source;
     private String relevance_score;
 
-//    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JoinColumn(name = "id")
-//    private List<Content> contents = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "id")
+    private List<Content> contents = new ArrayList<>();
 }

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.util.HashMap;
+
 @Service
 @RequiredArgsConstructor
 public class MarketAuxApiService {
@@ -22,20 +24,24 @@ public class MarketAuxApiService {
     @Value("${market-aux.token}")
     private String token;
 
+    @Value("${market-aux.domains}")
+    private String domains;
+
     @Value("${etf.fngu}")
     private String fngu;
 
     public void getNewsLetters() {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-//        params.add("symbols", "AAPL,AMZN,BABA,BIDU,META,GOOGL,MSFT,NFLX,NVDA,TSLA");
         params.add("symbols", fngu);
         params.add("industries", "Technology");
         params.add("filter_entities", "true");
-        params.add("domains", "marketwatch.com,cnn.com,bloomberg.com,gurufocus.com,nasdaq.com,etftrends.com");
+        params.add("domains", domains);
         params.add("api_token", token);
-        String s = webClientUtil.WebGet(uri.concat(all)
+        String s = webClientUtil.get(uri.concat(all)
                 , params
-                , null
+                , new HashMap<>()
                 , String.class);
+
+        System.out.println(s);
     }
 }

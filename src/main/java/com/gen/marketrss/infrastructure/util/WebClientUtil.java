@@ -15,12 +15,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class WebClientUtil {
 
-    private final WebClientConfig webClient;
-
-    public <T> T WebGet(String uri, MultiValueMap<String,String> params , Map<String,String> headers , Class<T> returnClass) {
-        WebClient.RequestHeadersSpec<?> request = webClient.build()
-                .get()
-                .uri(uriBuilder -> uriBuilder.path(uri).queryParams(params).build())
+    public <T> T get(String uri, MultiValueMap<String,String> params , Map<String,String> headers , Class<T> returnClass) {
+        WebClient.RequestHeadersSpec<?> request = WebClient.builder().baseUrl(uri)
+                .build().get()
+                .uri(uriBuilder -> uriBuilder.queryParams(params).build())
                 .headers(httpHeaders -> httpHeaders.setAll(headers))
                 .accept(MediaType.APPLICATION_JSON)
                 .acceptCharset(StandardCharsets.UTF_8);
