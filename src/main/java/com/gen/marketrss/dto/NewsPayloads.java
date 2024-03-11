@@ -1,19 +1,34 @@
 package com.gen.marketrss.dto;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
-public class NewsPayloads {
+@NoArgsConstructor
+@ToString
+public class NewsPayloads implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
+
+    @JsonProperty("data")
+    private List<NewsPayload> newsPayloads;
 
     @Getter
-    @ToString
-    @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-    public static class NewsPayload {
+    @NoArgsConstructor
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+    public static class NewsPayload implements Serializable{
+
+        @Serial
+        private static final long serialVersionUID = 1L;
 
         private  String uuid;
         private  String title;
@@ -26,9 +41,11 @@ public class NewsPayloads {
         private  String published_at;
         private  String source;
         private  String relevance_score;
-        private List<ContentPayload> contentPayloads;
 
-        public NewsPayload(String uuid, String title, String description, String keywords, String snippet, String url, String image_url, String language, String published_at, String source, String relevance_score, List<ContentPayload> contentPayloads) {
+        @JsonProperty("entities")
+        private List<ContentPayload> entities;
+
+        public NewsPayload(String uuid, String title, String description, String keywords, String snippet, String url, String image_url, String language, String published_at, String source, String relevance_score, List<ContentPayload> entities) {
             this.uuid = uuid;
             this.title = title;
             this.description = description;
@@ -40,8 +57,7 @@ public class NewsPayloads {
             this.published_at = published_at;
             this.source = source;
             this.relevance_score = relevance_score;
-            this.contentPayloads = contentPayloads;
+            this.entities = entities;
         }
     }
-
 }
