@@ -1,6 +1,6 @@
 package com.gen.marketrss.infrastructure.api;
 
-import com.gen.marketrss.dto.NewsPayloads;
+import com.gen.marketrss.domain.news.News;
 import com.gen.marketrss.infrastructure.util.WebClientUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,7 +20,7 @@ import static com.gen.marketrss.infrastructure.common.constant.Key.NEWS_KEY;
 public class MarketAuxApiService {
 
     private final WebClientUtil webClientUtil;
-    private final RedisTemplate<String, NewsPayloads> redisTemplate;
+    private final RedisTemplate<String, News> redisTemplate;
 
     @Value("${market-aux.uri.base-uri}")
     private String uri;
@@ -41,19 +41,20 @@ public class MarketAuxApiService {
         LocalDate currentDate = LocalDate.now();
         String key = NEWS_KEY + currentDate;
 
-        NewsPayloads payloads = getNewsPayloadsFromCache(key);
+        News payloads = getNewsPayloadsFromCache(key);
 
         if (payloads == null) {
-            NewsPayloads newsPayloads = fetchNewsPayloadsFromApi();
+            News newsPayloads = fetchNewsPayloadsFromApi();
+            System.out.println(newsPayloads.getNewsPayloads().get(0).getTitle());
             cacheNewsPayloads(key, newsPayloads);
         }
     }
 
-    private NewsPayloads getNewsPayloadsFromCache(String key) {
+    private News getNewsPayloadsFromCache(String key) {
         return redisTemplate.opsForValue().get(key);
     }
 
-    private NewsPayloads fetchNewsPayloadsFromApi() {
+    private News fetchNewsPayloadsFromApi() {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("symbols", fngu);
         params.add("industries", "Technology");
@@ -63,10 +64,10 @@ public class MarketAuxApiService {
         return webClientUtil.get(uri.concat(all)
                 , params
                 , new HashMap<>()
-                , NewsPayloads.class);
+                , News.class);
     }
 
-    private void cacheNewsPayloads(String key , NewsPayloads newsPayloads) {
-        redisTemplate.opsForValue().set(key, newsPayloads , 1 , TimeUnit.DAYS);
+    private void cacheNewsPayloads(String key , News newsPayloads) {
+        redisTemplate.opsForValue().set(key, newsPayloads, 1 , TimeUnit.DAYS);
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
@@ -24,5 +25,15 @@ public class WebClientUtil {
                 .acceptCharset(StandardCharsets.UTF_8);
 
         return request.exchangeToMono(response -> response.bodyToMono(returnClass)).block();
+    }
+
+    public <T> T post(String uri, String bearer,Object body,Class<T> tClass) {
+        WebClient.RequestHeadersSpec<?> request = WebClient.builder().baseUrl(uri)
+                .build().post()
+                .headers(httpHeaders -> httpHeaders.setBearerAuth(bearer))
+                .accept(MediaType.APPLICATION_JSON)
+                .bodyValue(body);
+
+        return request.exchangeToMono(response -> response.bodyToMono(tClass)).block();
     }
 }

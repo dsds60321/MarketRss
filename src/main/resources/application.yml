@@ -36,3 +36,11 @@ market-aux:
 
 etf:
   fngu: AAPL,AMZN,BABA,BIDU,META,GOOGL,MSFT,NFLX,NVDA,TSLA
+
+kakao:
+  token: 822a4e53b28bbdac877388e2efd17eb5
+  message:
+    api:
+      default-me: https://kapi.kakao.com/v2/api/talk/memo/default/send
+      custom-me: https://kapi.kakao.com/v2/api/talk/memo/send
+      friends: https://kapi.kakao.com/v1/api/talk/friends/message/send
