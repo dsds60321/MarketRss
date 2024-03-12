@@ -75,13 +75,25 @@ MessageMapper INSTANCE = Mappers.getMapper( MessageMapper.class );
 따라서, 당신의 요구 사항과 프로젝트의 특성에 따라 MapStruct의 사용 여부를 결정하면 좋을 것 같습니다.
 
 
+---
+
+### RedisTemplate
+* opsFor~ 로 시작하는 메소드는 Redis에서 지원하는 특정 타입의 데이터 구조에 대한 작업을 수행하는 연산자를 반환합니다
+1. opsForValue(): 이 메소드는 Redis의 String(또는 Value) 타입의 데이터에 대한 작업을 수행합니다. 예를 들면, 값을 설정하거나 가져오는 등의 작업을 할 수 있습니다.
+2. opsForList(): 이 메소드는 Redis의 List 타입의 데이터에 대한 작업을 수행합니다. 예를 들면, 리스트의 맨 앞이나 끝에 요소를 추가하거나, 특정 범위의 요소를 조회하는 등의 작업을 할 수 있습니다.
+3. opsForSet(): 이 메소드는 Redis의 Set 타입의 데이터에 대한 작업을 수행합니다. 예를 들면, 집합에 요소를 추가하거나 삭제하고, 두 집합의 교집합이나 합집합 등을 구하는 작업을 할 수 있습니다.
+4. opsForZSet(): 이 메소드는 Redis의 Sorted Set(ZSet) 타입의 데이터에 대한 작업을 수행합니다. 예를 들면, 점수를 기준으로 요소를 추가하거나 삭제하고, 점수 범위나 순위에 따른 요소를 조회하는 등의 작업을 할 수 있습니다.
+5. opsForHash(): 이 메소드는 Redis의 Hash 타입의 데이터에 대한 작업을 수행합니다. 예를 들면, 키-값 쌍을 해시에 추가하거나 삭제하고, 특정 키에 대한 값을 조회하는 등의 작업을 할 수 있습니다.
+6. opsForGeo(): 이 메소드는 Redis의 Geo(지리적 위치) 타입의 데이터에 대한 작업을 수행합니다. 예를 들면, 지리적 위치 정보를 추가하거나, 특정 지점에서 일정 범위 내에 있는 요소들을 조회하는 작업을 할 수 있습니다.
+7. opsForHyperLogLog(): 이 메소드는 Redis의 HyperLogLog 타입의 데이터에 대한 작업을 수행합니다. HyperLogLog는 중복을 허용하지 않는 유니크한 요소의 개수를 추정하기 위한 알고리즘입니다.
+ 
 
 
 
-
-출처 : https://tecoble.techcourse.co.kr/post/2020-05-26-static-factory-method/
 --- 
 ## JPA
 * 
 ---
 ## WebClient
+
+

@@ -45,5 +45,6 @@ kakao:
       default-me: https://kapi.kakao.com/v2/api/talk/memo/default/send
       custom-me: https://kapi.kakao.com/v2/api/talk/memo/send
       friends: https://kapi.kakao.com/v1/api/talk/friends/message/send
-    token: https://kauth.kakao.com/oauth/authorize
+    auth: https://kauth.kakao.com/oauth/authorize
+    token: https://kauth.kakao.com/oauth/token
   redirect-uri: http://127.0.0.1:8080/oauth

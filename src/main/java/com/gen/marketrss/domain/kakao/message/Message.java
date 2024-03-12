@@ -2,7 +2,9 @@ package com.gen.marketrss.domain.kakao.message;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.gen.marketrss.domain.news.News;
 import lombok.*;
 
 import java.io.Serial;
@@ -18,21 +20,28 @@ public class Message implements Serializable {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    @Builder
+    @Builder(toBuilder = true)
     @AllArgsConstructor
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-    public static class OfList {
-        private final String objectType = "list";
+    public static class OfList implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 1L;
+
+        private String objectType = "list";
         private String headerTitle;
         private Link headerLink;
         @JsonProperty("contents")
-        private List<Contents> contents;
+        private List<Content> contents;
 
         @Getter
         @NoArgsConstructor(access = AccessLevel.PROTECTED)
-        @Builder
+        @Builder(toBuilder = true)
         @AllArgsConstructor
-        public static class Contents {
+        public static class Content implements Serializable{
+
+            @Serial
+            private static final long serialVersionUID = 1L;
+
             private String title;
             private String description;
             private String imageUrl;
@@ -46,7 +55,11 @@ public class Message implements Serializable {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Builder
     @AllArgsConstructor
-    public static class Link {
+    public static class Link implements Serializable{
+
+        @Serial
+        private static final long serialVersionUID = 1L;
+
         private String webUrl;
         private String mobileWebUrl;
         private String androidExecutionParams;
