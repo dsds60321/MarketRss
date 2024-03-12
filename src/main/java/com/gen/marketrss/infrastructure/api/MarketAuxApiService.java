@@ -61,7 +61,7 @@ public class MarketAuxApiService {
         params.add("filter_entities", "true");
         params.add("domains", domains);
         params.add("api_token", token);
-        return webClientUtil.get(uri.concat(all)
+        return webClientUtil.sendGetRequest(uri.concat(all)
                 , params
                 , new HashMap<>()
                 , News.class);

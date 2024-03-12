@@ -52,6 +52,32 @@ public class CarFactoryExample {
 }
 ```
 
+### MapStruct 와 빌더 패턴 차이
+MapStruct를 사용해 Message 클래스를 구현하는 방식은 좋은 선택일 수 있습니다, 특히 객체 간의 변환 작업이 필요할 때 매우 유용합니다. MapStruct는 구조화된 데이터 매핑을 위한 Java 어노테이션 프로세서입니다. 주로 한 객체의 필드를 다른 객체의 필드로 매핑할 때 사용되며, 수동으로 getter와 setter를 호출하여 필드를 복사하는 대신, 이를 자동화하여 코드의 양을 줄이고 유지 보수성을 향상시킵니다.
+
+MapStruct와 빌더 패턴은 서로 다른 문제를 해결하기 위해 사용됩니다. 빌더 패턴은 객체 생성 과정을 더 안전하고, 이해하기 쉬우며, 유연하게 만들어주는 반면, MapStruct는 주로 다른 타입의 객체 간의 데이터 매핑을 자동화하여 개발자가 수작업으로 변환 로직을 작성하는 것을 줄여줍니다. 따라서, Message 클래스의 인스턴스를 생성하는 것이 주 목적이라면 빌더 패턴이 더 적합할 수 있고, Message 객체를 다른 타입의 객체로 변환하는 작업이 자주 필요하다면 MapStruct를 고려하는 것이 좋습니다.
+
+예를 들어, MessageDTO 클래스의 인스턴스를 Message 엔티티 객체로 변환하는 경우가 자주 있다면, MapStruct를 사용하여 변환 로직을 자동화할 수 있습니다. MapStruct를 사용하면 변환 로직을 별도의 클래스로 분리하여 관리할 수 있으며, 코드 생성을 통해 성능에도 이점을 가져올 수 있습니다.
+
+MapStruct를 사용한 Message 클래스 예시는 다음과 같습니다:
+
+~~~java
+@Mapper
+public interface MessageMapper {
+MessageMapper INSTANCE = Mappers.getMapper( MessageMapper.class );
+
+    @Mapping(source = "text", target = "content")
+    Message messageDtoToMessage(MessageDTO messageDTO);
+}
+~~~
+위 예제에서 MessageMapper 인터페이스는 MapStruct에 의해 구현됩니다. @Mapping 어노테이션을 사용하여 MessageDTO의 text 필드가 Message의 content 필드로 매핑되도록 지정할 수 있습니다. 이렇게 하면 복잡한 변환 로직을 간단한 어노테이션 설정으로 해결할 수 있으며, 코드의 가독성과 유지 보수성이 크게 향상됩니다.
+
+따라서, 당신의 요구 사항과 프로젝트의 특성에 따라 MapStruct의 사용 여부를 결정하면 좋을 것 같습니다.
+
+
+
+
+
 
 출처 : https://tecoble.techcourse.co.kr/post/2020-05-26-static-factory-method/
 --- 
