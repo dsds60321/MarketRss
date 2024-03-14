@@ -13,7 +13,7 @@ import org.springframework.util.MultiValueMap;
 
 import java.util.*;
 
-import static com.gen.marketrss.infrastructure.common.constant.Key.*;
+import static com.gen.marketrss.common.constant.Key.*;
 
 @Service
 @RequiredArgsConstructor

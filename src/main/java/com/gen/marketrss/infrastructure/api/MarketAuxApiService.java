@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
-import static com.gen.marketrss.infrastructure.common.constant.Key.NEWS_KEY;
+import static com.gen.marketrss.common.constant.Key.NEWS_KEY;
 
 @Service
 @RequiredArgsConstructor

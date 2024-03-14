@@ -11,7 +11,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -19,7 +18,6 @@ import java.util.Map;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Component
 @RequiredArgsConstructor
@@ -48,7 +46,7 @@ public class WebClientUtil {
     }
 
     public <T> T sendFormPostWithBearer(String uri, String bearer, Object body, Class<T> returnClass) {
-        MultiValueMap<String, String> formData = convert(new ObjectMapper(), body);
+        MultiValueMap<String, String> formData = convertToMultiValueMap(new ObjectMapper(), body);
 
         return WebClient.builder().baseUrl(uri)
                 .build().post()
@@ -71,7 +69,7 @@ public class WebClientUtil {
                 .exchangeToMono(response -> response.bodyToMono(returnClass)).block();
     }
 
-    public static MultiValueMap<String, String> convert(ObjectMapper objectMapper, Object dto) {
+    public static MultiValueMap<String, String> convertToMultiValueMap(ObjectMapper objectMapper, Object dto) {
         try {
             MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
             Map<String, Object> map = objectMapper.convertValue(dto, new TypeReference<Map<String, Object>>() {});
@@ -93,8 +91,7 @@ public class WebClientUtil {
 
             return params;
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new IllegalStateException("Url Parameter 변환 중 오류가 발생했습니다.");
+            throw new IllegalStateException("오류가 발생했습니다.-------------- \n" + e.getMessage());
         }
     }
 }

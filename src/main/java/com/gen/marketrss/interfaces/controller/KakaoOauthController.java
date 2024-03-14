@@ -1,4 +1,4 @@
-package com.gen.marketrss.application.controller;
+package com.gen.marketrss.interfaces.controller;
 
 import com.gen.marketrss.infrastructure.api.KaKaoMessageService;
 import lombok.RequiredArgsConstructor;

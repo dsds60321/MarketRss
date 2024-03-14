@@ -1,4 +1,4 @@
-package com.gen.marketrss.infrastructure.common.constant;
+package com.gen.marketrss.common.constant;
 
 public final class Key {
     public static final String NEWS_KEY = "NEWS_PAYLOAD_";
