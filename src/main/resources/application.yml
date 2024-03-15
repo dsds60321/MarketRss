@@ -17,6 +17,17 @@ spring:
     console:
       enabled: true
       path: /h2-console
+# spring session 설정
+  session:
+    store-type: redis
+    redis:
+      namespace: gen:session
+  redis:
+    host: localhost
+    password:
+    port: 6379
+    ssl: false
+    timeout: 60000
   data:
     redis:
       host: localhost

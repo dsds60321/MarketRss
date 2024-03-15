@@ -90,9 +90,15 @@ public class AuthServiceImplement implements AuthService {
                 return CheckCertificationResponseDto.certificationFail();
             }
 
+            if (certificationEntity.getVerifyCount() == 5) {
+                return CheckCertificationResponseDto.exceedAttemptLimitAndFail();
+            }
+
             boolean isMatched = certificationEntity.getEmail().equals(email) && certificationEntity.getCertificationNumber().equals(certificationNumber);
 
             if (!isMatched) {
+                certificationEntity.updateByVerifyCount();
+                certificationRepository.save(certificationEntity);
                 return CheckCertificationResponseDto.certificationFail();
             }
 

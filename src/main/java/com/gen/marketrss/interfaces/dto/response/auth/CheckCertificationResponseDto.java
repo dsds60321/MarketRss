@@ -14,4 +14,9 @@ public class CheckCertificationResponseDto extends ResponseDto {
         ResponseDto responseBody = new ResponseDto(ResponseCode.CERTIFICATION_FAIL, ResponseMessage.CERTIFICATION_FAIL);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
     }
+
+    public static ResponseEntity<? super CheckCertificationResponseDto> exceedAttemptLimitAndFail() {
+        ResponseDto responseBody = new ResponseDto(ResponseCode.CERTIFICATION_ATTEMPT_EXCEED, ResponseMessage.CERTIFICATION_ATTEMPT_EXCEED);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
+    }
 }

@@ -11,11 +11,16 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder
 @Entity(name = "certification")
-@Table(name = "certification")
+@Table
 public class CertificationEntity {
 
     @Id
     private String userId;
     private String email;
     private String certificationNumber;
+    private int verifyCount;
+
+    public void updateByVerifyCount() {
+        ++verifyCount;
+    }
 }
