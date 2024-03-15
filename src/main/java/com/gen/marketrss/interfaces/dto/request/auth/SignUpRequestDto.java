@@ -1,5 +1,6 @@
 package com.gen.marketrss.interfaces.dto.request.auth;
 
+import com.gen.marketrss.domain.entity.UsersEntity;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -21,5 +22,15 @@ public class SignUpRequestDto {
 
     @NotBlank
     private String certificationNumber;
+
+    public UsersEntity toEntity(String encodedPassword) {
+        return UsersEntity.builder()
+                .userId(id)
+                .password(encodedPassword)
+                .email(email)
+                .type("app")
+                .role("ROLE_USER")
+                .build();
+    }
 
 }

@@ -17,11 +17,6 @@ public class EmailCertificationResponseDto extends ResponseDto {
         super();
     }
 
-    public static ResponseEntity<EmailCertificationResponseDto> success() {
-        EmailCertificationResponseDto responseBody = new EmailCertificationResponseDto();
-        return ResponseEntity.status(HttpStatus.OK).body(responseBody);
-    }
-
     public static ResponseEntity<ResponseDto> mailSendFail() {
         ResponseDto responseBody = new ResponseDto(ResponseCode.MAIL_FAIL, ResponseMessage.MAIL_FAIL);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
