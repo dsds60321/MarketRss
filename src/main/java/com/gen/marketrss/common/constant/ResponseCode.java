@@ -6,7 +6,9 @@ public final class ResponseCode {
     public static final String VALIDATION_FAIL = "VF";
     public static final String DUPLICATE_ID = "DI";
     public static final String SIGN_IN_FAIL = "SF";
-    public static final String CERTIFICATIOn_FAIL = "CF";
+    public static final String CERTIFICATION_FAIL = "CF";
+    public static final String MAIL_FAIL = "MF";
+
     public static final String DATABASE_ERROR = "DBE";
 
 

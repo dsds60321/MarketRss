@@ -6,7 +6,7 @@ spring:
     password:
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
@@ -21,7 +21,19 @@ spring:
     redis:
       host: localhost
       port: 6379
-# Kakao Oauth2 설정
+# Gmail 설정
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: gunho3987@gmail.com
+    password: iwod hbkj dojr udqq
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  # Kakao Oauth2 설정
   security:
     oauth2:
       client:

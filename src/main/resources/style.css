@@ -1,0 +1,31 @@
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f5f5f5;
+    margin: 0;
+}
+
+.notification-container {
+    text-align: center;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    padding: 20px;
+    width: 340px;
+}
+
+.notification-container h2 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.notification-container p {
+    color: #666;
+}
+
+.notification-container strong {
+    color: #007bff;
+}
