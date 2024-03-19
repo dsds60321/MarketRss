@@ -142,3 +142,12 @@ MessageMapper INSTANCE = Mappers.getMapper( MessageMapper.class );
 
 ### refresh token이 필요한 이유
 https://velog.io/@chuu1019/Access-Token%EA%B3%BC-Refresh-Token%EC%9D%B4%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%B4%EA%B3%A0-%EC%99%9C-%ED%95%84%EC%9A%94%ED%95%A0%EA%B9%8C
+
+
+## @RequestBody 와 @ModelAttribute 차이
+* react + spring form 로그인 중 json을 자주 사용하다 보니 form 방식에도 @ReuqestBody를 사용해서 에러가 났음
+### @RequestBody
+* 클라이언트의 요청 본문(body)을 Java 객체로 변환해주는 데 사용됩니다. 주로 JSON이나 XML과 같은 형식의 데이터를 받아 처리할 때 사용됩니다. 이 어노테이션을 사용하려면 HTTP 메시지 컨버터(HttpMessageConverter)가 요청 본문을 객체로 변환하는 과정을 담당합니다.
+
+### @ModelAttribute
+* GET 요청에서 쿼리 파라미터나 POST 요청에서 form 데이터를 Java 객체로 바인딩할 때 사용됩니다. 이 어노테이션은 요청 파라미터를 객체의 필드와 자동으로 매핑해줍니다. 따라서 복잡한 객체 구조를 가진 JSON이나 XML 처리에는 적합하지 않고, 주로 폼 데이터를 처리할 때 사용됩니다.

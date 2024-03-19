@@ -10,8 +10,8 @@ import org.springframework.http.ResponseEntity;
 @Getter
 public class SignInResponseDto extends ResponseDto {
 
-    private String accessToken;
-    private String refreshToken;
+    private final String accessToken;
+    private final String refreshToken;
 
     private SignInResponseDto(String accessToken, String refreshToken) {
         super();

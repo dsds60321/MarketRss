@@ -11,11 +11,13 @@ import com.gen.marketrss.interfaces.dto.response.auth.*;
 import com.gen.marketrss.interfaces.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -31,6 +33,7 @@ public class AuthServiceImplement implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
     private final StringRedisTemplate stringRedisTemplate;
+    private final RedisTemplate<String, SignInRequestDto> signInRedisTemplate;
 
     @Override
     public ResponseEntity<? super IdCheckResponseDto> idCheck(IdCheckRequestDto dto) {
@@ -153,6 +156,7 @@ public class AuthServiceImplement implements AuthService {
     public ResponseEntity<? super SignInResponseDto> signIn(SignInRequestDto dto) {
         String accessToken;
         String refreshToken;
+
         try {
             String userId = dto.getId();
             UsersEntity usersEntity = usersRepository.findByUserId(userId);
@@ -172,6 +176,9 @@ public class AuthServiceImplement implements AuthService {
             refreshToken = jwtProvider.generateRefreshToken(userId);
             stringRedisTemplate.opsForValue().set(userId, refreshToken, refreshTimeout , TimeUnit.DAYS);
 
+            // user 정보 redis 저장
+            signInRedisTemplate.opsForValue().set(userId, dto, Duration.ofDays(refreshTimeout));
+
         } catch (Exception e ) {
             e.printStackTrace();
             return SignInResponseDto.databaseError();
@@ -181,10 +188,10 @@ public class AuthServiceImplement implements AuthService {
     }
 
     private String getCertificationNumber() {
-        String certificationNumber = "";
+        StringBuilder certificationNumber = new StringBuilder();
 
-        for (int count = 0; count < 4; count ++) certificationNumber += (int) (Math.random() * 10);
+        for (int count = 0; count < 4; count ++) certificationNumber.append((int) (Math.random() * 10));
 
-        return certificationNumber;
+        return certificationNumber.toString();
     }
 }
