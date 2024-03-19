@@ -1,7 +1,7 @@
 package com.gen.marketrss.common.constant;
 
 public final class Html {
-    public static final String EMAIL_VERTIFY = "<div style='margin : 10%%'>" +
+    public static final String EMAIL_VERTIFY = "<div style='margin : 3%%'>" +
             "<div style='text-align: center;\n" +
             "    background-color: #fff;\n" +
             "    border-radius: 8px;\n" +
