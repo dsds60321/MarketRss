@@ -141,3 +141,4 @@ MessageMapper INSTANCE = Mappers.getMapper( MessageMapper.class );
 2. 토큰이 클라이언트에 저장, 서버에서 클라이언트의 토큰을 조작할수 없습니다.
 
 ### refresh token이 필요한 이유
+https://velog.io/@chuu1019/Access-Token%EA%B3%BC-Refresh-Token%EC%9D%B4%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%B4%EA%B3%A0-%EC%99%9C-%ED%95%84%EC%9A%94%ED%95%A0%EA%B9%8C
