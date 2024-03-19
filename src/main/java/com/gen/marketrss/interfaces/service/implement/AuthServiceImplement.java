@@ -3,16 +3,12 @@ package com.gen.marketrss.interfaces.service.implement;
 import com.gen.marketrss.domain.entity.CertificationEntity;
 import com.gen.marketrss.domain.entity.UsersEntity;
 import com.gen.marketrss.infrastructure.common.provider.EmailProvider;
+import com.gen.marketrss.infrastructure.common.provider.JwtProvider;
 import com.gen.marketrss.infrastructure.repository.CertificationRepository;
 import com.gen.marketrss.infrastructure.repository.UsersRepository;
-import com.gen.marketrss.interfaces.dto.request.auth.CheckCertificationRequestDto;
-import com.gen.marketrss.interfaces.dto.request.auth.EmailCertificationRequestDto;
-import com.gen.marketrss.interfaces.dto.request.auth.IdCheckRequestDto;
-import com.gen.marketrss.interfaces.dto.request.auth.SignUpRequestDto;
-import com.gen.marketrss.interfaces.dto.response.auth.CheckCertificationResponseDto;
-import com.gen.marketrss.interfaces.dto.response.auth.EmailCertificationResponseDto;
-import com.gen.marketrss.interfaces.dto.response.auth.IdCheckResponseDto;
-import com.gen.marketrss.interfaces.dto.response.auth.SignUpResponseDto;
+import com.gen.marketrss.interfaces.dto.request.auth.*;
+import com.gen.marketrss.interfaces.dto.response.ResponseDto;
+import com.gen.marketrss.interfaces.dto.response.auth.*;
 import com.gen.marketrss.interfaces.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +23,7 @@ public class AuthServiceImplement implements AuthService {
     private final CertificationRepository certificationRepository;
     private final EmailProvider emailProvider;
     private final PasswordEncoder passwordEncoder;
+    private final JwtProvider jwtProvider;
 
     @Override
     public ResponseEntity<? super IdCheckResponseDto> idCheck(IdCheckRequestDto dto) {
@@ -143,6 +140,35 @@ public class AuthServiceImplement implements AuthService {
         }
 
         return SignUpResponseDto.success();
+    }
+
+    @Override
+    public ResponseEntity<? super SignInResponseDto> signIn(SignInRequestDto dto) {
+        String token = null;
+
+        try {
+            String userId = dto.getId();
+            UsersEntity usersEntity = usersRepository.findByUserId(userId);
+            if (usersEntity == null) {
+                return SignInResponseDto.signInFail();
+            }
+
+            String password = dto.getPassword();
+            String encodedPassword = usersEntity.getPassword();
+            boolean isMatched = passwordEncoder.matches(password, encodedPassword);
+
+            if (!isMatched) {
+                return SignInResponseDto.signInFail();
+            }
+
+            token = jwtProvider.create(userId);
+
+        } catch (Exception e ) {
+            e.printStackTrace();
+            return SignInResponseDto.databaseError();
+        }
+
+        return SignInResponseDto.success(token);
     }
 
     private String getCertificationNumber() {

@@ -1,13 +1,7 @@
 package com.gen.marketrss.interfaces.controller;
 
-import com.gen.marketrss.interfaces.dto.request.auth.CheckCertificationRequestDto;
-import com.gen.marketrss.interfaces.dto.request.auth.EmailCertificationRequestDto;
-import com.gen.marketrss.interfaces.dto.request.auth.IdCheckRequestDto;
-import com.gen.marketrss.interfaces.dto.request.auth.SignUpRequestDto;
-import com.gen.marketrss.interfaces.dto.response.auth.CheckCertificationResponseDto;
-import com.gen.marketrss.interfaces.dto.response.auth.EmailCertificationResponseDto;
-import com.gen.marketrss.interfaces.dto.response.auth.IdCheckResponseDto;
-import com.gen.marketrss.interfaces.dto.response.auth.SignUpResponseDto;
+import com.gen.marketrss.interfaces.dto.request.auth.*;
+import com.gen.marketrss.interfaces.dto.response.auth.*;
 import com.gen.marketrss.interfaces.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -42,5 +36,10 @@ public class AuthController {
     @PostMapping("/sign-up")
     public ResponseEntity<? super SignUpResponseDto> signUp(@RequestBody @Valid SignUpRequestDto requestBody) {
         return authService.signUp(requestBody);
+    }
+
+    @PostMapping("/sign-in")
+    public ResponseEntity<? super SignInResponseDto> signIn (@RequestBody @Valid SignInRequestDto requestBody) {
+        return authService.signIn(requestBody);
     }
 }

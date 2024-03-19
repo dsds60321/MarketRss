@@ -64,7 +64,7 @@ spring:
             user-info-uri: https://kauth.kakao.com/v2/user/me
             user-name-attribute: id
 # JWT Secret key
-secret-key: gen_market_stock_sKey_1111
+secret-key: gen_market_stock_sKey_1111efgqekjngqejkngjqenjgnqejevbqeeqe
 
 market-aux:
   uri:
