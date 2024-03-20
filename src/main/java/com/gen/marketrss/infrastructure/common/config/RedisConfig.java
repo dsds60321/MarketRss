@@ -12,8 +12,8 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 public class RedisConfig {
 
     @Bean
-    public RedisTemplate<String, News> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        RedisTemplate<String, News> redisTemplate = new RedisTemplate<>();
+    public RedisTemplate<?, ?> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        RedisTemplate<?, ?> redisTemplate = new RedisTemplate<>();
         redisTemplate.setDefaultSerializer(RedisSerializer.json());
         redisTemplate.setKeySerializer(RedisSerializer.string());
         redisTemplate.setHashKeySerializer(RedisSerializer.string());

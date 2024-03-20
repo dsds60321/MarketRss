@@ -7,23 +7,33 @@ import com.gen.marketrss.infrastructure.common.provider.JwtProvider;
 import com.gen.marketrss.infrastructure.repository.CertificationRepository;
 import com.gen.marketrss.infrastructure.repository.UsersRepository;
 import com.gen.marketrss.interfaces.dto.request.auth.*;
-import com.gen.marketrss.interfaces.dto.response.ResponseDto;
 import com.gen.marketrss.interfaces.dto.response.auth.*;
 import com.gen.marketrss.interfaces.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
+
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImplement implements AuthService {
+
+    @Value("${jwt.refresh-time}")
+    private long refreshTimeout;
 
     private final UsersRepository usersRepository;
     private final CertificationRepository certificationRepository;
     private final EmailProvider emailProvider;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
+    private final StringRedisTemplate stringRedisTemplate;
+    private final RedisTemplate<String, SignInRequestDto> signInRedisTemplate;
 
     @Override
     public ResponseEntity<? super IdCheckResponseDto> idCheck(IdCheckRequestDto dto) {
@@ -144,7 +154,8 @@ public class AuthServiceImplement implements AuthService {
 
     @Override
     public ResponseEntity<? super SignInResponseDto> signIn(SignInRequestDto dto) {
-        String token = null;
+        String accessToken;
+        String refreshToken;
 
         try {
             String userId = dto.getId();
@@ -161,21 +172,26 @@ public class AuthServiceImplement implements AuthService {
                 return SignInResponseDto.signInFail();
             }
 
-            token = jwtProvider.create(userId);
+            accessToken = jwtProvider.generateAccessToken(userId);
+            refreshToken = jwtProvider.generateRefreshToken(userId);
+            stringRedisTemplate.opsForValue().set(userId, refreshToken, refreshTimeout , TimeUnit.DAYS);
+
+            // user 정보 redis 저장
+            signInRedisTemplate.opsForValue().set(userId, dto, Duration.ofDays(refreshTimeout));
 
         } catch (Exception e ) {
             e.printStackTrace();
             return SignInResponseDto.databaseError();
         }
 
-        return SignInResponseDto.success(token);
+        return SignInResponseDto.success(accessToken, refreshToken);
     }
 
     private String getCertificationNumber() {
-        String certificationNumber = "";
+        StringBuilder certificationNumber = new StringBuilder();
 
-        for (int count = 0; count < 4; count ++) certificationNumber += (int) (Math.random() * 10);
+        for (int count = 0; count < 4; count ++) certificationNumber.append((int) (Math.random() * 10));
 
-        return certificationNumber;
+        return certificationNumber.toString();
     }
 }

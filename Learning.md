@@ -121,13 +121,33 @@ MessageMapper INSTANCE = Mappers.getMapper( MessageMapper.class );
 * 인증이 성공하면, 사용자는 자신의 역할(예: 관리자, 일반 사용자)에 따라 특정 페이지나 기능에 접근할 수 있는 권한(인가)을 부여받습니다.
 
 
-### Jwt (Json Web Token)
+## Jwt (Json Web Token)
 * JWT는 웹 표준으로서 두 개체 사이에서 JSON 객체를 사용하여 가볍고 자가수용적인 방식으로 정보를 안전하게 전송하기 위한 컴팩트하고 독립적인 방법입니다.
 * 정보는 디지털 서명되어 있어, 검증과 신뢰가 가능합니다. JWT는 비밀키(HMAC 알고리즘) 또는 RSA와 같은 공개키/비공개키 쌍을 사용하여 서명할 수 있습니다.
 
-* JWT 구조
+### JWT 구조
 * JWT는 세 부분으로 구성됩니다: 헤더(Header), 페이로드(Payload), 서명(Signature).
 
-1. 헤더(Header): 토큰의 타입(JWT)과 서명을 위해 사용된 알고리즘(HS256, RS256 등)을 정의합니다.
-2. 페이로드(Payload): 토큰에 담을 클레임(claim) 정보가 포함됩니다. 클레임은 토큰에 대한 속성(예: 사용자 정보)을 의미하며, 세 가지 유형(등록된, 공개, 비공개 클레임)이 있습니다.
-3. 서명(Signature): 헤더의 인코딩 값, 페이로드의 인코딩 값, 비밀키를 알고리즘으로 해시하여 생성합니다.
+1. 헤더(Header): 서명(Signature)를 해싱하기위한 알고리즘(HS256, RS256 등) 정보를 정의합니다.
+2. 페이로드(Payload): 서버와 클라이언트가 주고받는, 시스템에서 실제로 사용될 정보에 대한 내용을 담고 있습니다.
+3. 서명(Signature): 토큰에 유효성 검증을 위한 문자열, 서버에서 유효한 토큰인지를 검증합니다.
+
+### 장점
+1. 중앙의 인증서버, 데이터 스토어에 대한 의존성이 없어 시스템에 수평적 확장에 유리합니다.
+2. Base64 URL Encoding 방식이라 URL, Cookie, Header 모두 사용 가능합니다.
+
+### 단점
+1. Payload의 정보가 많아지면 네트워크 사용량 증가, 데이터 설계시 고려 필요
+2. 토큰이 클라이언트에 저장, 서버에서 클라이언트의 토큰을 조작할수 없습니다.
+
+### refresh token이 필요한 이유
+https://velog.io/@chuu1019/Access-Token%EA%B3%BC-Refresh-Token%EC%9D%B4%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%B4%EA%B3%A0-%EC%99%9C-%ED%95%84%EC%9A%94%ED%95%A0%EA%B9%8C
+
+
+## @RequestBody 와 @ModelAttribute 차이
+* react + spring form 로그인 중 json을 자주 사용하다 보니 form 방식에도 @ReuqestBody를 사용해서 에러가 났음
+### @RequestBody
+* 클라이언트의 요청 본문(body)을 Java 객체로 변환해주는 데 사용됩니다. 주로 JSON이나 XML과 같은 형식의 데이터를 받아 처리할 때 사용됩니다. 이 어노테이션을 사용하려면 HTTP 메시지 컨버터(HttpMessageConverter)가 요청 본문을 객체로 변환하는 과정을 담당합니다.
+
+### @ModelAttribute
+* GET 요청에서 쿼리 파라미터나 POST 요청에서 form 데이터를 Java 객체로 바인딩할 때 사용됩니다. 이 어노테이션은 요청 파라미터를 객체의 필드와 자동으로 매핑해줍니다. 따라서 복잡한 객체 구조를 가진 JSON이나 XML 처리에는 적합하지 않고, 주로 폼 데이터를 처리할 때 사용됩니다.
