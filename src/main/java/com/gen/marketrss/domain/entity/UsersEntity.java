@@ -25,8 +25,6 @@ public class UsersEntity {
     private String email;
     private String type;
     private String role;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userId")
-    private List<StockEntity> stockEntities = new ArrayList<>();
 
     public UserPayload toPayload() {
         return UserPayload.builder()

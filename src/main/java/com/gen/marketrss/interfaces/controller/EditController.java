@@ -1,18 +1,20 @@
 package com.gen.marketrss.interfaces.controller;
 
 import com.gen.marketrss.interfaces.dto.payload.UserPayload;
+import com.gen.marketrss.interfaces.dto.request.edit.StockRequestDto;
 import com.gen.marketrss.interfaces.dto.response.edit.EditResponseDto;
 import com.gen.marketrss.interfaces.service.EditService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/edit")
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class EditController {
 
     private final EditService editService;
@@ -20,5 +22,10 @@ public class EditController {
     @GetMapping
     public ResponseEntity<? super EditResponseDto> edit(@AuthenticationPrincipal UserPayload userPayload) {
         return editService.editData(userPayload.getUserId());
+    }
+
+    @PostMapping("/stock")
+    public ResponseEntity<? super EditResponseDto> registStock (@AuthenticationPrincipal UserPayload userPayload,@RequestBody @Valid StockRequestDto requestBody) {
+        return editService.registStock(userPayload.getUserId(), requestBody);
     }
 }
