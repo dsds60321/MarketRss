@@ -13,6 +13,7 @@ import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.function.Function;
@@ -88,5 +89,9 @@ public class JwtProvider {
         }
 
         return extractUsername(jwt);
+    }
+
+    public String getRefreshRedisKey(String userId) {
+        return userId + "_refreshToken";
     }
 }

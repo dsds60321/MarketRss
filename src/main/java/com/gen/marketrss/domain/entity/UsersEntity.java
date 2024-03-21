@@ -1,11 +1,15 @@
 package com.gen.marketrss.domain.entity;
 
 import com.gen.marketrss.interfaces.dto.payload.UserPayload;
+import com.gen.marketrss.interfaces.dto.request.auth.SignInRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,6 +25,8 @@ public class UsersEntity {
     private String email;
     private String type;
     private String role;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userId")
+    private List<StockEntity> stockEntities = new ArrayList<>();
 
     public UserPayload toPayload() {
         return UserPayload.builder()
@@ -30,4 +36,5 @@ public class UsersEntity {
                 .role(role)
                 .build();
     }
+
 }
