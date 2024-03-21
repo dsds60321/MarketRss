@@ -9,6 +9,7 @@ public final class ResponseCode {
     public static final String CERTIFICATION_FAIL = "CF";
     public static final String CERTIFICATION_ATTEMPT_EXCEED = "CAE";
     public static final String MAIL_FAIL = "MF";
+    public static final String TOKEN_EXPIRED = "TE";
 
     public static final String DATABASE_ERROR = "DBE";
 

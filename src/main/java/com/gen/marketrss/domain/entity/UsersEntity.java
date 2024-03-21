@@ -1,5 +1,6 @@
 package com.gen.marketrss.domain.entity;
 
+import com.gen.marketrss.interfaces.dto.payload.UserPayload;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,4 +21,13 @@ public class UsersEntity {
     private String email;
     private String type;
     private String role;
+
+    public UserPayload toPayload() {
+        return UserPayload.builder()
+                .userId(userId)
+                .email(email)
+                .type(type)
+                .role(role)
+                .build();
+    }
 }

@@ -1,14 +1,18 @@
 package com.gen.marketrss.interfaces.filter;
 
+import com.gen.marketrss.common.constant.ResponseCode;
+import com.gen.marketrss.common.constant.ResponseMessage;
 import com.gen.marketrss.infrastructure.common.provider.JwtProvider;
 import com.gen.marketrss.domain.entity.UsersEntity;
 import com.gen.marketrss.infrastructure.repository.UsersRepository;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -43,6 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
             String userId = jwtProvider.validate(token);
+
             if (userId == null) {
                 filterChain.doFilter(request, response);
                 return;
@@ -56,15 +61,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
             AbstractAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(userId, null, authorities);
+                    new UsernamePasswordAuthenticationToken(usersEntity.toPayload(), null, authorities);
 
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
             securityContext.setAuthentication(authenticationToken);
             SecurityContextHolder.setContext(securityContext);
 
-        } catch (Exception e) {
+        } catch (JwtException e) {
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("{\"code\": \""+ ResponseCode.TOKEN_EXPIRED +"\", \"message\": \""+ ResponseMessage.TOKEN_EXPIRED +"\"}");
+            return;
+        }catch (Exception e) {
             e.printStackTrace();
+            filterChain.doFilter(request, response);
+            return;
         }
 
         filterChain.doFilter(request, response);

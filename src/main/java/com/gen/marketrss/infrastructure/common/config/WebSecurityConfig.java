@@ -1,11 +1,9 @@
 package com.gen.marketrss.infrastructure.common.config;
 
 import com.gen.marketrss.interfaces.filter.JwtAuthenticationFilter;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -26,7 +24,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.io.IOException;
 
-@Configurable
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -77,8 +74,9 @@ public class WebSecurityConfig {
 
     static class FailedAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
+
         @Override
-        public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+        public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.getWriter().write("{\"code\": \"NP\", \"message\": \"No Permission.\"}");

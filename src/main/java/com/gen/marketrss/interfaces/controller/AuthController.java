@@ -1,6 +1,7 @@
 package com.gen.marketrss.interfaces.controller;
 
 import com.gen.marketrss.interfaces.dto.request.auth.*;
+import com.gen.marketrss.interfaces.dto.response.ResponseDto;
 import com.gen.marketrss.interfaces.dto.response.auth.*;
 import com.gen.marketrss.interfaces.service.AuthService;
 import jakarta.validation.Valid;
@@ -42,4 +43,9 @@ public class AuthController {
     public ResponseEntity<? super SignInResponseDto> signIn (@RequestBody @Valid SignInRequestDto requestBody) {
         return authService.signIn(requestBody);
     }
+
+//    @PostMapping("/refresh-token")
+//    public ResponseEntity<? super TokenResponseDto> refreshToken() {
+//        return "";
+//    }
 }

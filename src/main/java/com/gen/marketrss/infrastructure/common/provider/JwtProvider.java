@@ -1,12 +1,15 @@
 package com.gen.marketrss.infrastructure.common.provider;
 
+import com.gen.marketrss.common.constant.ResponseMessage;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.time.Instant;
@@ -57,7 +60,7 @@ public class JwtProvider {
     }
 
     public Boolean isTokenExpired(String token) {
-        return new Date().before(extractExpiration(token));
+        return extractExpiration(token).before(new Date());
     }
 
     public String generateAccessToken(String userId) {
@@ -78,18 +81,12 @@ public class JwtProvider {
     }
 
     public String validate(String jwt) {
-        try {
-            Boolean isExpired = isTokenExpired(jwt);
+        Boolean isExpired = isTokenExpired(jwt);
 
-            if (!isExpired) {
-                return null;
-            }
-
-            return extractUsername(jwt);
-
-        } catch (Exception e ) {
-            e.printStackTrace();
-            return null;
+        if (isExpired) {
+            throw new JwtException(ResponseMessage.TOKEN_EXPIRED);
         }
+
+        return extractUsername(jwt);
     }
 }

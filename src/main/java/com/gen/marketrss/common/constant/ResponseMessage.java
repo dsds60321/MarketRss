@@ -9,7 +9,7 @@ public final class ResponseMessage {
     public static final String CERTIFICATION_FAIL = "Certification failed.";
     public static final String CERTIFICATION_ATTEMPT_EXCEED = "Failed beyond the limit of number of attempts";
     public static final String MAIL_FAIL = "Mail send failed;";
-
+    public static final String TOKEN_EXPIRED = "Token has expired.";
     public static final String DATABASE_ERROR = "Database error.";
 
 
