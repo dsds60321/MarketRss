@@ -10,18 +10,21 @@ import com.gen.marketrss.interfaces.dto.request.auth.*;
 import com.gen.marketrss.interfaces.dto.response.auth.*;
 import com.gen.marketrss.interfaces.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.concurrent.TimeUnit;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class AuthServiceImplement implements AuthService {
 
@@ -186,6 +189,32 @@ public class AuthServiceImplement implements AuthService {
         }
 
         return SignInResponseDto.success(accessToken, refreshToken);
+    }
+
+    @Override
+    public ResponseEntity<? super TokenResponseDto> refreshToken(String userId, TokenRequestDto dto) {
+        String accessToken = "";
+
+        try {
+            String refreshToken = dto.getRefreshToken();
+
+            Boolean isExpired = jwtProvider.isTokenExpired(refreshToken);
+
+            if (isExpired) {
+                return TokenResponseDto.expiredToken();
+            }
+
+            accessToken = jwtProvider.generateAccessToken(userId);
+
+            if (!StringUtils.hasText(accessToken)) {
+                return TokenResponseDto.databaseError();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return TokenResponseDto.databaseError();
+        }
+        return TokenResponseDto.success(accessToken, dto.getRefreshToken());
     }
 
     private String getCertificationNumber() {
