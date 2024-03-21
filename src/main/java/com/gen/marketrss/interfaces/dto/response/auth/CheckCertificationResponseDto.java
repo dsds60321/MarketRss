@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 @Getter
 public class CheckCertificationResponseDto extends ResponseDto {
 
-    public static ResponseEntity<ResponseDto> certificationFail() {
+    public static ResponseEntity<? super CheckCertificationResponseDto> certificationFail() {
         ResponseDto responseBody = new ResponseDto(ResponseCode.CERTIFICATION_FAIL, ResponseMessage.CERTIFICATION_FAIL);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
     }
