@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -174,7 +175,7 @@ public class AuthServiceImplement implements AuthService {
 
             accessToken = jwtProvider.generateAccessToken(userId);
             refreshToken = jwtProvider.generateRefreshToken(userId);
-            stringRedisTemplate.opsForValue().set(userId, refreshToken, refreshTimeout , TimeUnit.DAYS);
+            stringRedisTemplate.opsForValue().set(userId + "_refreshToken_" + LocalDate.now(), refreshToken, refreshTimeout , TimeUnit.DAYS);
 
             // user 정보 redis 저장
             signInRedisTemplate.opsForValue().set(userId, dto, Duration.ofDays(refreshTimeout));

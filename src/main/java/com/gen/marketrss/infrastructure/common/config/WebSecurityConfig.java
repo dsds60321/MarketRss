@@ -49,9 +49,9 @@ public class WebSecurityConfig {
                         .requestMatchers("/", "/api/v1/auth/**").permitAll()
                         .anyRequest().authenticated()
                 )
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exceptionHandling -> exceptionHandling
-                        .authenticationEntryPoint(new FailedAuthenticationEntryPoint()))
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                        .authenticationEntryPoint(new FailedAuthenticationEntryPoint()));
 
         return httpSecurity.build();
     }

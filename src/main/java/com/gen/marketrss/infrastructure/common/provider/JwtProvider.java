@@ -3,6 +3,7 @@ package com.gen.marketrss.infrastructure.common.provider;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +15,7 @@ import java.util.Date;
 import java.util.function.Function;
 
 @Component
+@Slf4j
 public class JwtProvider {
 
     @Value("${jwt.secret}")
@@ -55,7 +57,7 @@ public class JwtProvider {
     }
 
     public Boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+        return new Date().before(extractExpiration(token));
     }
 
     public String generateAccessToken(String userId) {
@@ -89,8 +91,5 @@ public class JwtProvider {
             e.printStackTrace();
             return null;
         }
-
     }
-
-
 }
