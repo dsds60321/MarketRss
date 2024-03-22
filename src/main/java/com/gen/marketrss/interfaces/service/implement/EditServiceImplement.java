@@ -1,6 +1,5 @@
 package com.gen.marketrss.interfaces.service.implement;
 
-import com.gen.marketrss.domain.entity.StockEntity;
 import com.gen.marketrss.domain.entity.UsersEntity;
 import com.gen.marketrss.infrastructure.repository.StockRepository;
 import com.gen.marketrss.infrastructure.repository.UsersRepository;
@@ -10,7 +9,6 @@ import com.gen.marketrss.interfaces.dto.response.edit.EditResponseDto;
 import com.gen.marketrss.interfaces.dto.response.edit.StockResponseDto;
 import com.gen.marketrss.interfaces.service.EditService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,7 +18,6 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class EditServiceImplement implements EditService{
 
     private final UsersRepository usersRepository;
@@ -28,7 +25,7 @@ public class EditServiceImplement implements EditService{
     private final RedisTemplate<String, UserPayload> userPayloadRedisTemplate;
 
     @Override
-    public ResponseEntity<? super EditResponseDto> editData(String userId) {
+    public ResponseEntity<? super EditResponseDto> userDetailData(String userId) {
         UserPayload userPayload = null;
         StockResponseDto stockResponseDto = null;
         try {
@@ -51,11 +48,6 @@ public class EditServiceImplement implements EditService{
     @Override
     public ResponseEntity<? super EditResponseDto> registStock(String userId, StockRequestDto requestBody) {
         try {
-            List<String> reqStocks = requestBody.getStocks();
-
-            if (reqStocks.isEmpty()) {
-                return EditResponseDto.validationFail();
-            }
 
             UsersEntity usersEntity = usersRepository.findByUserId(userId);
 

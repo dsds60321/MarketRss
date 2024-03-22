@@ -21,7 +21,7 @@ public class EditController {
 
     @GetMapping
     public ResponseEntity<? super EditResponseDto> edit(@AuthenticationPrincipal UserPayload userPayload) {
-        return editService.editData(userPayload.getUserId());
+        return editService.userDetailData(userPayload.getUserId());
     }
 
     @PostMapping("/stock")

@@ -11,9 +11,9 @@ public class ScheduledTasks {
 
     private final MarketAuxApiService marketAuxApiService;
 
-    // 매일 오후 11시 실행
-    @Scheduled(cron = "0 0 23 * * *", zone = "Asia/Seoul")
+    // 매일 오후 10시 실행
+    @Scheduled(cron = "0 0 22 * * *", zone = "Asia/Seoul")
     public void fetchNewsPayloads() {
-        marketAuxApiService.getNewsLetters();
+        marketAuxApiService.cacheNewsLettersByUser();
     }
 }

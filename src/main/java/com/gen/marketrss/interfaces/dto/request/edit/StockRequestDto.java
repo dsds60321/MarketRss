@@ -11,13 +11,12 @@ import java.util.List;
 @Getter
 public class StockRequestDto {
 
-    @NotEmpty
     private List<String> stocks;
 
     public StockEntity toEntity(String userId) {
         return StockEntity.builder()
                 .userId(userId)
-                .stock(StringUtils.collectionToDelimitedString(stocks, ","))
+                .stock(stocks.isEmpty() ? "" : StringUtils.collectionToDelimitedString(stocks, ","))
                 .build();
     }
 }
