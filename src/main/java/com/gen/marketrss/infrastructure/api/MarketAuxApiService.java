@@ -40,8 +40,8 @@ public class MarketAuxApiService {
     @Value("${market-aux.domains}")
     private String domains;
 
-    @Value("${etf.fngu}")
-    private String fngu;
+    @Value("${market-aux.payload-ttl}")
+    private long payloadTtl;
 
     public void cacheNewsLettersByUser() {
 
@@ -80,7 +80,8 @@ public class MarketAuxApiService {
                 , News.class);
     }
 
+    // 7일간 보관
     private void cacheNewsPayloads(String key , News newsPayloads) {
-        redisTemplate.opsForValue().set(key, newsPayloads, 1 , TimeUnit.DAYS);
+        redisTemplate.opsForValue().set(key, newsPayloads, payloadTtl , TimeUnit.DAYS);
     }
 }

@@ -80,6 +80,7 @@ market-aux:
     industry: /entity/industry/list
   token: PcPhOlstzaDu8RrT6CdF1nlMhkOHcfKEMzw6gUeU
   domains: marketwatch.com,cnn.com,bloomberg.com,gurufocus.com,nasdaq.com,etftrends.com
+  payload-ttl: 7
 
 etf:
   fngu: AAPL,AMZN,BABA,BIDU,META,GOOGL,MSFT,NFLX,NVDA,TSLA
