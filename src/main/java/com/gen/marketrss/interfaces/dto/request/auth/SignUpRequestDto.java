@@ -33,6 +33,8 @@ public class SignUpRequestDto {
                 .email(email)
                 .type("app")
                 .role("ROLE_USER")
+                .send_email("Y")
+                .send_kakao("N")
                 .build();
     }
 

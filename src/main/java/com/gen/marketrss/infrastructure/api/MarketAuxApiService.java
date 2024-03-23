@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-import static com.gen.marketrss.common.constant.Key.getNewsKey;
+import static com.gen.marketrss.common.constant.Key.getCurrentDateNewsKey;
 
 @Service
 @Slf4j
@@ -57,7 +57,7 @@ public class MarketAuxApiService {
             List<StockEntity> stockEntities = stockRepository.findAll();
 
             stockEntities.forEach(stockEntity -> {
-                String key = getNewsKey(stockEntity.getUserId());
+                String key = getCurrentDateNewsKey(stockEntity.getUserId());
                 News news = getCurrentNewsPayloadsFromCache(key).orElseGet(() -> {
                     News newsPayload = fetchNewsPayloadsFromApi(stockEntity.getStock());
                     cacheNewsPayloads(key, newsPayload);

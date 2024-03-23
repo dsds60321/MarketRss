@@ -1,6 +1,7 @@
 package com.gen.marketrss.interfaces.service.implement;
 
 import com.gen.marketrss.domain.entity.UsersEntity;
+import com.gen.marketrss.infrastructure.common.util.RedisUtil;
 import com.gen.marketrss.infrastructure.repository.StockRepository;
 import com.gen.marketrss.infrastructure.repository.UsersRepository;
 import com.gen.marketrss.interfaces.dto.payload.UserPayload;
@@ -22,19 +23,19 @@ public class EditServiceImplement implements EditService{
 
     private final UsersRepository usersRepository;
     private final StockRepository stockRepository;
-    private final RedisTemplate<String, UserPayload> userPayloadRedisTemplate;
+    private final RedisUtil redisUtil;
 
     @Override
     public ResponseEntity<? super EditResponseDto> userDetailData(String userId) {
         UserPayload userPayload = null;
         StockResponseDto stockResponseDto = null;
         try {
-            userPayload = userPayloadRedisTemplate.opsForValue().get(userId);
+            userPayload = redisUtil.get(userId, UserPayload.class);
             stockResponseDto = stockRepository.findByUserId(userId).toDto();
 
             if (userPayload == null) {
                 userPayload = usersRepository.findByUserId(userId).toPayload();
-                userPayloadRedisTemplate.opsForValue().set(userId, userPayload);
+                redisUtil.set(userId, userPayload);
             }
 
         } catch (Exception e) {

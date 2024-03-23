@@ -4,6 +4,7 @@ import com.gen.marketrss.domain.entity.CertificationEntity;
 import com.gen.marketrss.domain.entity.UsersEntity;
 import com.gen.marketrss.infrastructure.common.provider.EmailProvider;
 import com.gen.marketrss.infrastructure.common.provider.JwtProvider;
+import com.gen.marketrss.infrastructure.common.util.RedisUtil;
 import com.gen.marketrss.infrastructure.repository.CertificationRepository;
 import com.gen.marketrss.infrastructure.repository.UsersRepository;
 import com.gen.marketrss.interfaces.dto.payload.UserPayload;
@@ -38,7 +39,7 @@ public class AuthServiceImplement implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
     private final StringRedisTemplate stringRedisTemplate;
-    private final RedisTemplate<String, UserPayload> userRedisTemplate;
+    private final RedisUtil redisUtil;
 
     @Override
     public ResponseEntity<? super IdCheckResponseDto> idCheck(IdCheckRequestDto dto) {
@@ -182,7 +183,8 @@ public class AuthServiceImplement implements AuthService {
             stringRedisTemplate.opsForValue().set(jwtProvider.getRefreshRedisKey(userId), refreshToken, refreshTimeout , TimeUnit.DAYS);
 
             // user 정보 redis 저장
-            userRedisTemplate.opsForValue().set(userId, usersEntity.toPayload(), Duration.ofDays(refreshTimeout));
+            redisUtil.set(userId, usersEntity.toPayload(), Duration.ofDays(refreshTimeout));
+//            userRedisTemplate.opsForValue().set(userId, usersEntity.toPayload(), Duration.ofDays(refreshTimeout));
 
         } catch (Exception e ) {
             e.printStackTrace();

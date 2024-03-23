@@ -1,15 +1,22 @@
 package com.gen.marketrss.interfaces.service.implement;
 
 import com.gen.marketrss.domain.news.News;
+import com.gen.marketrss.infrastructure.common.util.RedisUtil;
 import com.gen.marketrss.interfaces.dto.response.news.NewsResponseDto;
 import com.gen.marketrss.interfaces.service.NewsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.gen.marketrss.common.constant.Key.getNewsKey;
 
@@ -19,21 +26,30 @@ import static com.gen.marketrss.common.constant.Key.getNewsKey;
 public class NewsServiceImplement implements NewsService {
 
     private final RedisTemplate<String, News> newsRedisTemplate;
+    private final RedisUtil redisUtil;
 
     @Override
     public ResponseEntity<? super NewsResponseDto> newsPaging(String userId, int page, int size) {
-        News news = newsRedisTemplate.opsForValue().get(getNewsKey(userId));
+        Set<String> keys = redisUtil.findByKeysRedisPattern(newsRedisTemplate, getNewsKey(userId));
+        List<News.NewsPayload> newsList = new ArrayList<>();
 
-        if (news == null) {
+        for (String key : keys) {
+            News news = redisUtil.get(key, News.class);
+            if (news != null) {
+                newsList.addAll(news.getNewsPayloads());
+            }
+        }
+
+        if (newsList.isEmpty()) {
             return NewsResponseDto.validationFail();
         }
 
-        return NewsResponseDto.success(getNewsPaging(news, page, size), news.getNewsPayloads().size());
+        return NewsResponseDto.success(getNewsPaging(newsList, page, size), newsList.size());
     }
 
-    private List<News.NewsPayload> getNewsPaging(News news, int page, int size) {
+    private List<News.NewsPayload> getNewsPaging(List<News.NewsPayload> news, int page, int size) {
         page--;
-        int total = news.getNewsPayloads().size();
+        int total = news.size();
         int start = page * size;
         int end = Math.min((start + size), total);
 
@@ -41,6 +57,6 @@ public class NewsServiceImplement implements NewsService {
             return List.of();
         }
 
-        return news.getNewsPayloads().subList(start, end);
+        return news.subList(start, end);
     }
 }

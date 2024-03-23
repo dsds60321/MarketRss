@@ -22,4 +22,6 @@ public class UserPayload implements Serializable {
     private String email;
     private String type;
     private String role;
+    private String send_kakao;
+    private String send_email;
 }
