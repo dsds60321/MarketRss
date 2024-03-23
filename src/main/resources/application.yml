@@ -69,6 +69,7 @@ jwt:
   access-time: 1 # 1H
   refresh-time: 7 # 7D
 
+host: http://localhost:8080
 # image upload
 img:
   upload : /src/main/resources/static/images/

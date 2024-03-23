@@ -22,7 +22,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-import static com.gen.marketrss.common.constant.Key.getCurrentDateNewsKey;
+import static com.gen.marketrss.infrastructure.common.util.RedisUtil.getCurrentDateNewsKey;
+
 
 @Service
 @Slf4j

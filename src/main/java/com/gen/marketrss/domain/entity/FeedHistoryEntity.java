@@ -3,6 +3,8 @@ package com.gen.marketrss.domain.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -17,6 +19,9 @@ public class FeedHistoryEntity {
     private String sendKakao;
     private String sendEmail;
     private int sendCount;
+
+    @Column(columnDefinition = "DATE")
+    private LocalDate regDate;
 
     @Setter
     @ManyToOne

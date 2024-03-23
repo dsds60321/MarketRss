@@ -2,6 +2,7 @@ package com.gen.marketrss.infrastructure.api;
 
 import com.gen.marketrss.domain.kakao.message.Message;
 import com.gen.marketrss.domain.news.News;
+import com.gen.marketrss.infrastructure.common.util.RedisUtil;
 import com.gen.marketrss.infrastructure.util.WebClientUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,7 +40,7 @@ public class KaKaoMessageService {
 
     private final WebClientUtil webClientUtil;
 
-    private final RedisTemplate<String, News> redisTemplate;
+    private final RedisUtil redisUtil;
 
     private final StringRedisTemplate stringRedisTemplate;
 
@@ -67,7 +68,7 @@ public class KaKaoMessageService {
     }
 
     public Map<String, Message.OfList> getMessageByList() {
-        News news = redisTemplate.opsForValue().get(NEWS_KEY + "2024-03-12");
+        News news = redisUtil.get(NEWS_KEY + "2024-03-12", News.class);
         List<Message.OfList.Content> contents = new ArrayList<>();
         List<News.NewsPayload> newsPayloadList = news.getNewsPayloads();
 

@@ -6,19 +6,16 @@ import com.gen.marketrss.interfaces.dto.response.news.NewsResponseDto;
 import com.gen.marketrss.interfaces.service.NewsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.gen.marketrss.common.constant.Key.getNewsKey;
+import static com.gen.marketrss.infrastructure.common.util.RedisUtil.getNewsKey;
+
 
 @Service
 @RequiredArgsConstructor
