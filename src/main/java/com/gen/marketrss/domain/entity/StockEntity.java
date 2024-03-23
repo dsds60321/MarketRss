@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "stock")
@@ -21,10 +22,18 @@ public class StockEntity {
     private String userId;
     private String stock;
 
+    @OneToMany(mappedBy = "stockEntity", cascade = CascadeType.ALL)
+    private List<FeedHistoryEntity> feedHistoryEntities = new ArrayList<>();
+
     public StockResponseDto toDto() {
         List<String> stocks = stock.contains(",") ? List.of(stock.split(",")) : List.of(stock);
         return StockResponseDto.builder()
                 .stocks(stocks)
                 .build();
+    }
+
+    public void addFeedHistory(FeedHistoryEntity feedHistory) {
+        this.feedHistoryEntities.add(feedHistory);
+        feedHistory.setStockEntity(this);
     }
 }

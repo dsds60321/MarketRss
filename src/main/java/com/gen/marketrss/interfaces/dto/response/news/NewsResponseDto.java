@@ -6,18 +6,22 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 @Getter
 public class NewsResponseDto extends ResponseDto {
 
-    private final News news;
+    private final List<News.NewsPayload> news;
+    private final long total;
 
-    public NewsResponseDto(News news) {
+    public NewsResponseDto(List<News.NewsPayload> news, long total) {
         super();
         this.news = news;
+        this.total = total;
     }
 
-    public static ResponseEntity<? super NewsResponseDto> success(News news) {
-        NewsResponseDto responseBody = new NewsResponseDto(news);
+    public static ResponseEntity<? super NewsResponseDto> success(List<News.NewsPayload> news, long total) {
+        NewsResponseDto responseBody = new NewsResponseDto(news, total);
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 }

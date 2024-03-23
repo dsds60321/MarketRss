@@ -25,6 +25,8 @@ public class UsersEntity {
     private String email;
     private String type;
     private String role;
+    private String send_kakao;
+    private String send_email;
 
     public UserPayload toPayload() {
         return UserPayload.builder()
