@@ -12,6 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -42,6 +47,9 @@ public class MarketAuxApiService {
 
     @Value("${market-aux.payload-ttl}")
     private long payloadTtl;
+
+    @Value("${img.upload}")
+    private String uploadPath;
 
     public void cacheNewsLettersByUser() {
 
@@ -74,14 +82,41 @@ public class MarketAuxApiService {
         params.add("filter_entities", "true");
         params.add("domains", domains);
         params.add("api_token", token);
-        return webClientUtil.sendGetRequest(uri.concat(all)
+        News news = webClientUtil.sendGetRequest(uri.concat(all)
                 , params
                 , new HashMap<>()
                 , News.class);
+        news.getNewsPayloads().forEach(newsPayload -> {
+            newsPayload.setImage_url(thirdPartyImageUpload(newsPayload.getImage_url()));
+        });
+
+        return news;
     }
 
     // 7일간 보관
     private void cacheNewsPayloads(String key , News newsPayloads) {
         redisTemplate.opsForValue().set(key, newsPayloads, payloadTtl , TimeUnit.DAYS);
+    }
+
+    /**
+     * thirdParty 이미지 업로드
+     * @param url
+     * @return
+     */
+    private String thirdPartyImageUpload(String url) {
+        log.info("thirdPartyImageUpload url : {}", url);
+        try (InputStream in = new URL(url).openStream()) {
+            // TODO: 파일명 잡는 부분 더 좋은 방법이 있을듯
+            String fileName = url.substring(url.lastIndexOf("/") + 1, url.lastIndexOf(".") + 4);
+            String fullPath = System.getProperty("user.dir") + uploadPath + fileName;
+            Path path = Path.of(fullPath);
+            Files.copy(in, path, StandardCopyOption.REPLACE_EXISTING);
+            return "/images/"+ fileName;
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+        }
+
+        return "";
     }
 }

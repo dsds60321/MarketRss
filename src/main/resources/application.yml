@@ -69,6 +69,10 @@ jwt:
   access-time: 1 # 1H
   refresh-time: 7 # 7D
 
+# image upload
+img:
+  upload : /src/main/resources/static/images/
+
 market-aux:
   uri:
     base-uri: https://api.marketaux.com

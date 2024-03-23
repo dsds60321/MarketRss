@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serial;
@@ -37,6 +38,7 @@ public class News implements Serializable {
         private  String keywords;
         private  String snippet;
         private  String url;
+        @Setter
         private  String image_url;
         private  String language;
         private  String published_at;
@@ -44,6 +46,7 @@ public class News implements Serializable {
         private  String relevance_score;
         @JsonProperty("entities")
         private List<ContentPayload> entities;
+
     }
 
     @NoArgsConstructor
