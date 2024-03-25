@@ -2,9 +2,7 @@ package com.gen.marketrss.domain.kakao.message;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.gen.marketrss.domain.news.News;
 import lombok.*;
 
 import java.io.Serial;
@@ -32,6 +30,7 @@ public class Message implements Serializable {
         private Link headerLink;
         @JsonProperty("contents")
         private List<Content> contents;
+        private List<Button> buttons;
 
         @Getter
         @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -64,5 +63,17 @@ public class Message implements Serializable {
         private String mobileWebUrl;
         private String androidExecutionParams;
         private String iosExecutionParams;
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @Builder
+    @AllArgsConstructor
+    public static class Button implements Serializable{
+
+        @Serial
+        private static final long serialVersionUID = 1L;
+        private String title;
+        private Link link;
     }
 }

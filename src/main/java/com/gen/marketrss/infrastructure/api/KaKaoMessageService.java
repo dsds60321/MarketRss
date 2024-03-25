@@ -66,18 +66,9 @@ public class KaKaoMessageService {
 
         List<Message.OfList.Content> contents = new ArrayList<>();
         List<News.NewsPayload> newsPayloadList = news.getNewsPayloads();
-
+        String link = "";
         newsPayloadList
                 .forEach(data -> {
-                    Message.OfList.Content content = Message.OfList.Content
-                            .builder()
-                            .title(data.getTitle())
-                            .description(data.getDescription())
-                            .imageUrl(data.getImage_url())
-                            .imageWidth("640")
-                            .imageHeight("640")
-                            .build();
-
                     Message.Link contentLink = Message.Link.builder()
                             .webUrl(data.getUrl())
                             .mobileWebUrl(data.getUrl())
@@ -85,7 +76,13 @@ public class KaKaoMessageService {
                             .iosExecutionParams("")
                             .build();
 
-                    content = content.toBuilder()
+                    Message.OfList.Content content = Message.OfList.Content
+                            .builder()
+                            .title(data.getTitle())
+                            .description(data.getDescription())
+                            .imageUrl(data.getImage_url())
+                            .imageWidth("640")
+                            .imageHeight("640")
                             .link(contentLink)
                             .build();
 
@@ -93,21 +90,37 @@ public class KaKaoMessageService {
                 });
 
         Message.Link messageLink = Message.Link.builder()
-                .webUrl("")
-                .mobileWebUrl("")
+                .webUrl(host)
+                .mobileWebUrl(host)
                 .androidExecutionParams("")
                 .iosExecutionParams("")
                 .build();
+
+        Message.Link buttonLink = Message.Link.builder()
+                .webUrl(host)
+                .build();
+
+        Message.Button button = Message.Button.builder()
+                .title("웹으로 이동")
+                .link(buttonLink).build();
 
         Message.OfList.OfListBuilder messageList = Message.OfList
                 .builder()
                 .objectType("list")
                 .headerTitle("금일 뉴스 피드")
-                .headerLink(messageLink);
+                .headerLink(messageLink)
+                .buttons(List.of(button));
 
 
         Message.OfList list = messageList.contents(contents).build();
         Map<String, Message.OfList> template = Map.of(KAKAO_MSG_OBJ_KEY, list);
+
+        try {
+            log.info("news List : {} " , new ObjectMapper().writeValueAsString(template));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         HashMap result = webClientUtil.sendFormPostWithBearer(meApi, userEntity.getKakao_token(), template, HashMap.class);
 
 
