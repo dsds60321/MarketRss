@@ -1,6 +1,7 @@
 package com.gen.marketrss.application;
 
 import com.gen.marketrss.infrastructure.api.EmailMessageService;
+import com.gen.marketrss.infrastructure.api.KaKaoMessageService;
 import com.gen.marketrss.infrastructure.api.MarketAuxApiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -12,9 +13,10 @@ public class ScheduledTasks {
 
     private final MarketAuxApiService marketAuxApiService;
     private final EmailMessageService emailMessageService;
+    private final KaKaoMessageService kaKaoMessageService;
 
     // 매일 오후 10시 실행
-    @Scheduled(cron = "0 0 22 * * *", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 19 05 * * *", zone = "Asia/Seoul")
     public void fetchNewsPayloads() {
         marketAuxApiService.cacheNewsLettersByUser();
     }
@@ -24,4 +26,5 @@ public class ScheduledTasks {
     public void fetchNewsEmail() {
         emailMessageService.sendEmailMessage();
     }
+
 }

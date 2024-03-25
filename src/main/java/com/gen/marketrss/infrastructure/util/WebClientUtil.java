@@ -52,7 +52,7 @@ public class WebClientUtil {
         return WebClient.builder().baseUrl(uri)
                 .build().post()
                 .contentType(APPLICATION_FORM_URLENCODED)
-                .headers(httpHeaders -> httpHeaders.setBearerAuth("iMmpviksJ3AYHLFhU-1LijgubhDsVfqVR4UKPXWaAAABjjPoFVNONYg--5I0Sw"))
+                .headers(httpHeaders -> httpHeaders.setBearerAuth(bearer))
                 .accept(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromFormData(formData))
                 .acceptCharset(UTF_8)

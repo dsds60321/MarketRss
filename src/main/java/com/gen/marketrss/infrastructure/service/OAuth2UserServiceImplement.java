@@ -26,7 +26,6 @@ public class OAuth2UserServiceImplement extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest request) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(request);
         String oauthClientName = request.getClientRegistration().getClientName();
-
         UsersEntity usersEntity = null;
         String userId = null;
 
@@ -36,6 +35,7 @@ public class OAuth2UserServiceImplement extends DefaultOAuth2UserService {
                     .userId(userId)
                     .email("")
                     .type("kakao")
+                    .kakao_token(request.getAccessToken().getTokenValue())
                     .role("ROLE_USER")
                     .send_email("N")
                     .send_kakao("Y")

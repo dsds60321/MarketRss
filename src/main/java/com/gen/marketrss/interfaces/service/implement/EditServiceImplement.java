@@ -2,28 +2,33 @@ package com.gen.marketrss.interfaces.service.implement;
 
 import com.gen.marketrss.domain.entity.StockEntity;
 import com.gen.marketrss.domain.entity.UsersEntity;
+import com.gen.marketrss.infrastructure.api.KaKaoMessageService;
 import com.gen.marketrss.infrastructure.common.util.RedisUtil;
 import com.gen.marketrss.infrastructure.repository.StockRepository;
 import com.gen.marketrss.infrastructure.repository.UsersRepository;
 import com.gen.marketrss.interfaces.dto.payload.UserPayload;
 import com.gen.marketrss.interfaces.dto.request.edit.StockRequestDto;
+import com.gen.marketrss.interfaces.dto.response.ResponseDto;
 import com.gen.marketrss.interfaces.dto.response.edit.EditResponseDto;
 import com.gen.marketrss.interfaces.dto.response.edit.StockResponseDto;
 import com.gen.marketrss.interfaces.service.EditService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EditServiceImplement implements EditService{
 
     private final UsersRepository usersRepository;
     private final StockRepository stockRepository;
+    private final KaKaoMessageService kaKaoMessageService;
     private final RedisUtil redisUtil;
 
     @Override
@@ -51,6 +56,27 @@ public class EditServiceImplement implements EditService{
         return EditResponseDto.success(userPayload, stockResponseDto);
     }
 
+    @Transactional
+    @Override
+    public ResponseEntity<? super EditResponseDto> putUserDetailData(UserPayload userPayload) {
+
+        try {
+            UsersEntity userEntity = usersRepository.findByUserId(userPayload.getUserId());
+            if (userEntity != null) {
+                userEntity.update(userPayload);
+                redisUtil.set(userEntity.getUserId(), userEntity.toPayload());
+            } else {
+                return ResponseDto.validationFail();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            EditResponseDto.databaseError();
+        }
+
+        return ResponseDto.success();
+    }
+
     @Override
     public ResponseEntity<? super EditResponseDto> registStock(String userId, StockRequestDto requestBody) {
         try {
@@ -65,6 +91,16 @@ public class EditServiceImplement implements EditService{
 
         } catch (Exception e) {
             e.printStackTrace();
+            return EditResponseDto.databaseError();
+        }
+
+        return EditResponseDto.success();
+    }
+
+    @Override
+    public ResponseEntity<? super EditResponseDto> kakaoFeed(String userId) {
+
+        if (!kaKaoMessageService.sendFeed(userId)) {
             return EditResponseDto.databaseError();
         }
 

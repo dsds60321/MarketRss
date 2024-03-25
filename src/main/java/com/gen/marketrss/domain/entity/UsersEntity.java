@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+import org.springframework.context.annotation.Description;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,7 @@ public class UsersEntity {
     private String email;
     private String type;
     private String role;
+    private String kakao_token;
     @Column(nullable = false)
     @ColumnDefault("Y")
     private String send_email;
@@ -44,5 +47,11 @@ public class UsersEntity {
                 .send_email(send_email)
                 .send_kakao(send_kakao)
                 .build();
+    }
+
+    public void update(UserPayload user) {
+        this.email = user.getEmail();
+        this.send_email = user.getSend_email();
+        this.send_kakao = user.getSend_kakao();
     }
 }

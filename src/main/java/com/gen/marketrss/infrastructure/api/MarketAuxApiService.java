@@ -98,7 +98,7 @@ public class MarketAuxApiService {
         for (News.NewsPayload newsPayload : newsPayloadList) {
             i ++;
             String source = newsPayload.getSource().contains(".") ? newsPayload.getSource().split("\\.")[0] : newsPayload.getSource();
-            newsPayload.setImage_url(thirdPartyImageUpload(newsPayload.getImage_url(), source + i));
+            newsPayload.setCustom_image_url(thirdPartyImageUpload(newsPayload.getImage_url(), source + i));
         }
 
         return news;

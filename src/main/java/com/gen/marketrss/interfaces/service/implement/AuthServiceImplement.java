@@ -221,6 +221,11 @@ public class AuthServiceImplement implements AuthService {
             Boolean isExpired = jwtProvider.isTokenExpired(refreshToken);
 
             if (isExpired) {
+                // kakao 계정 연결 끊기
+                if (userId.contains("kakao")) {
+                    unlinkBykakao(userId);
+                }
+
                 return TokenResponseDto.expiredToken();
             }
 
@@ -268,8 +273,8 @@ public class AuthServiceImplement implements AuthService {
         return webClientUtil.sendFormPostWithParams(logoutUri, headers, params, HashMap.class);
     }
 
-    private void unlinkBykakao(UserPayload user) {
-        String kakaoId = user.getUserId().split("_")[1];
+    private void unlinkBykakao(String userId) {
+        String kakaoId = userId.split("_")[1];
 
         HashMap<String, String> headers = new HashMap<>();
         headers.put("Authorization", "KakaoAK " + adminId);

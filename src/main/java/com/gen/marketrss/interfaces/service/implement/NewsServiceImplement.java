@@ -34,11 +34,6 @@ public class NewsServiceImplement implements NewsService {
         for (String key : keys) {
             News news = redisUtil.get(key, News.class);
 
-            try {
-                log.info("news Data : {} " , new ObjectMapper().writeValueAsString(news));
-            } catch (Exception e ) {
-                e.printStackTrace();
-            }
             if (news != null) {
                 newsList.addAll(news.getNewsPayloads());
             }

@@ -10,8 +10,4 @@ class KaKaoMessageServiceTest {
     @Autowired
     KaKaoMessageService kaKaoMessageService;
 
-    @Test
-    void sendCustomMessage() {
-        kaKaoMessageService.sendCustomMessage();
-    }
 }

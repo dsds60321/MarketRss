@@ -1,12 +1,10 @@
 package com.gen.marketrss.interfaces.handler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gen.marketrss.domain.entity.CustomOAuth2User;
 import com.gen.marketrss.domain.entity.UsersEntity;
 import com.gen.marketrss.infrastructure.common.provider.JwtProvider;
 import com.gen.marketrss.infrastructure.common.util.RedisUtil;
 import com.gen.marketrss.infrastructure.repository.UsersRepository;
-import com.gen.marketrss.interfaces.dto.payload.UserPayload;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -44,14 +42,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
-
-        try {
-            log.info("oAuth2User : {} " , new ObjectMapper().writeValueAsString(oAuth2User));
-            log.info("\n authentication : {} " , new ObjectMapper().writeValueAsString(authentication));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         String userId = oAuth2User.getName();
         UsersEntity usersEntity = usersRepository.findByUserId(userId);
 

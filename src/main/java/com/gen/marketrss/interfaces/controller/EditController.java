@@ -1,5 +1,6 @@
 package com.gen.marketrss.interfaces.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gen.marketrss.interfaces.dto.payload.UserPayload;
 import com.gen.marketrss.interfaces.dto.request.edit.StockRequestDto;
 import com.gen.marketrss.interfaces.dto.response.edit.EditResponseDto;
@@ -24,8 +25,24 @@ public class EditController {
         return editService.userDetailData(userPayload.getUserId());
     }
 
+    @PostMapping
+    public ResponseEntity<? super EditResponseDto> editByPut(@RequestBody @Valid UserPayload userPayload) {
+        try {
+            log.info("userData : {} " , new ObjectMapper().writeValueAsString(userPayload));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return editService.putUserDetailData(userPayload);
+    }
+
+
     @PostMapping("/stock")
     public ResponseEntity<? super EditResponseDto> registStock (@AuthenticationPrincipal UserPayload userPayload,@RequestBody @Valid StockRequestDto requestBody) {
         return editService.registStock(userPayload.getUserId(), requestBody);
+    }
+
+    @GetMapping("/kakao")
+    public ResponseEntity<? super EditResponseDto> kakaoFeed(@AuthenticationPrincipal UserPayload userPayload) {
+        return editService.kakaoFeed(userPayload.getUserId());
     }
 }

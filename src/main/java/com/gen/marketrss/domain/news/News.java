@@ -38,8 +38,9 @@ public class News implements Serializable {
         private  String keywords;
         private  String snippet;
         private  String url;
-        @Setter
         private  String image_url;
+        @Setter
+        private  String custom_image_url;
         private  String language;
         private  String published_at;
         private  String source;
