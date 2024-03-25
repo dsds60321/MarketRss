@@ -6,13 +6,14 @@ import com.gen.marketrss.infrastructure.common.util.RedisUtil;
 import com.gen.marketrss.infrastructure.util.WebClientUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import static com.gen.marketrss.common.constant.Key.*;
 
@@ -20,23 +21,18 @@ import static com.gen.marketrss.common.constant.Key.*;
 @RequiredArgsConstructor
 public class KaKaoMessageService {
 
-    @Value("${kakao.api.auth}")
-    private String authApi;
-
-    @Value("${kakao.api.token}")
-    private String oauthTokenApi;
-
     @Value("${kakao.api.message.default-me}")
     private String meApi;
 
     @Value("${kakao.api.message.custom-me}")
     private String meCustomApi;
 
-    @Value("${kakao.token.rest}")
-    private String restKey;
+    @Value("${kakao.token.clientId}")
+    private String clientId;
 
-    @Value("${kakao.redirect-uri}")
-    private String redirectUri;
+
+    @Value("${kakao.token.clientSecret}")
+    private String clientSecret;
 
     private final WebClientUtil webClientUtil;
 
@@ -44,23 +40,6 @@ public class KaKaoMessageService {
 
     private final StringRedisTemplate stringRedisTemplate;
 
-    // kakao token 얻기 위한 메소드
-    public void getAuthCode(){
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("client_id", restKey);
-        params.add("redirect_uri", redirectUri);
-        params.add("response_type", "code");
-        webClientUtil.sendFormPostWithParams(authApi, params, String.class);
-    }
-
-    public void getOauthToken(String code) {
-        Map<String, String> body = Map.of("grant_type", "authorization_code",
-                "client_id", restKey,
-                "redirect_uri", redirectUri,
-                "code", code);
-        String s = webClientUtil.sendFormPostRequest(oauthTokenApi, body, String.class);
-        System.out.println(s);
-    }
 
     public void sendCustomMessage() {
         String accToken = stringRedisTemplate.opsForValue().get(KAKAO_ACC_TOKEN);

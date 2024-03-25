@@ -28,6 +28,11 @@ public class StockEntity {
 
     public StockResponseDto toDto() {
         List<String> stocks = stock.contains(",") ? List.of(stock.split(",")) : List.of(stock);
+
+        if (stocks.isEmpty()) {
+            return null;
+        }
+
         return StockResponseDto.builder()
                 .stocks(stocks)
                 .build();

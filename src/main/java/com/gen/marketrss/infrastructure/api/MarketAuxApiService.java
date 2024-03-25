@@ -17,10 +17,15 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
 import static com.gen.marketrss.infrastructure.common.util.RedisUtil.getCurrentDateNewsKey;
 
@@ -87,9 +92,14 @@ public class MarketAuxApiService {
                 , params
                 , new HashMap<>()
                 , News.class);
-        news.getNewsPayloads().forEach(newsPayload -> {
-            newsPayload.setImage_url(thirdPartyImageUpload(newsPayload.getImage_url()));
-        });
+
+        List<News.NewsPayload> newsPayloadList = news.getNewsPayloads();
+        int i = 0;
+        for (News.NewsPayload newsPayload : newsPayloadList) {
+            i ++;
+            String source = newsPayload.getSource().contains(".") ? newsPayload.getSource().split("\\.")[0] : newsPayload.getSource();
+            newsPayload.setImage_url(thirdPartyImageUpload(newsPayload.getImage_url(), source + i));
+        }
 
         return news;
     }
@@ -104,11 +114,9 @@ public class MarketAuxApiService {
      * @param url
      * @return
      */
-    private String thirdPartyImageUpload(String url) {
-        log.info("thirdPartyImageUpload url : {}", url);
+    private String thirdPartyImageUpload(String url, String source) {
         try (InputStream in = new URL(url).openStream()) {
-            // TODO: 파일명 잡는 부분 더 좋은 방법이 있을듯
-            String fileName = url.substring(url.lastIndexOf("/") + 1, url.lastIndexOf(".") + 4);
+            String fileName = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + source + ".png";
             String fullPath = System.getProperty("user.dir") + uploadPath + fileName;
             Path path = Path.of(fullPath);
             Files.copy(in, path, StandardCopyOption.REPLACE_EXISTING);

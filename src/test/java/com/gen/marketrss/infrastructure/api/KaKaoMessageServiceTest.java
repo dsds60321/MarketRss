@@ -11,16 +11,6 @@ class KaKaoMessageServiceTest {
     KaKaoMessageService kaKaoMessageService;
 
     @Test
-    void sendAuthToken() {
-        kaKaoMessageService.getAuthCode();
-    }
-
-    @Test
-    void getMessageByList() {
-        kaKaoMessageService.getMessageByList();
-    }
-
-    @Test
     void sendCustomMessage() {
         kaKaoMessageService.sendCustomMessage();
     }

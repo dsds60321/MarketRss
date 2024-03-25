@@ -20,7 +20,7 @@ public class ScheduledTasks {
     }
 
     // 매일 오후 10시 실행
-    @Scheduled(cron = "0 58 2 * * *", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 0 22 * * *", zone = "Asia/Seoul")
     public void fetchNewsEmail() {
         emailMessageService.sendEmailMessage();
     }

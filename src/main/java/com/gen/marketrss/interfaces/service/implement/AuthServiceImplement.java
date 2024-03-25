@@ -1,5 +1,6 @@
 package com.gen.marketrss.interfaces.service.implement;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gen.marketrss.domain.entity.CertificationEntity;
 import com.gen.marketrss.domain.entity.UsersEntity;
 import com.gen.marketrss.infrastructure.common.provider.EmailProvider;
@@ -7,8 +8,10 @@ import com.gen.marketrss.infrastructure.common.provider.JwtProvider;
 import com.gen.marketrss.infrastructure.common.util.RedisUtil;
 import com.gen.marketrss.infrastructure.repository.CertificationRepository;
 import com.gen.marketrss.infrastructure.repository.UsersRepository;
+import com.gen.marketrss.infrastructure.util.WebClientUtil;
 import com.gen.marketrss.interfaces.dto.payload.UserPayload;
 import com.gen.marketrss.interfaces.dto.request.auth.*;
+import com.gen.marketrss.interfaces.dto.response.ResponseDto;
 import com.gen.marketrss.interfaces.dto.response.auth.*;
 import com.gen.marketrss.interfaces.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +22,15 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -33,6 +41,16 @@ public class AuthServiceImplement implements AuthService {
     @Value("${jwt.refresh-time}")
     private long refreshTimeout;
 
+    @Value("${kakao.token.adminId}")
+    private String adminId;
+
+    @Value("${kakao.api.auth.unlink}")
+    private String unlinkUri;
+
+    @Value("${kakao.api.auth.logout}")
+    private String logoutUri;
+
+    private final WebClientUtil webClientUtil;
     private final UsersRepository usersRepository;
     private final CertificationRepository certificationRepository;
     private final EmailProvider emailProvider;
@@ -184,7 +202,6 @@ public class AuthServiceImplement implements AuthService {
 
             // user 정보 redis 저장
             redisUtil.set(userId, usersEntity.toPayload(), Duration.ofDays(refreshTimeout));
-//            userRedisTemplate.opsForValue().set(userId, usersEntity.toPayload(), Duration.ofDays(refreshTimeout));
 
         } catch (Exception e ) {
             e.printStackTrace();
@@ -218,6 +235,50 @@ public class AuthServiceImplement implements AuthService {
             return TokenResponseDto.databaseError();
         }
         return TokenResponseDto.success(accessToken, dto.getRefreshToken());
+    }
+
+    /**
+     * logout
+     * @param user
+     * @return
+     */
+    @Override
+    public ResponseEntity<? super SignInResponseDto> logout(UserPayload user) {
+        try {
+            String userId = user.getUserId();
+
+            if (user.getType().equals("kakao")) {
+                logoutByKakao(userId);
+            }
+
+            redisUtil.delete(jwtProvider.getRefreshRedisKey(userId));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
+        return ResponseDto.success();
+    }
+
+    private HashMap<String, Objects> logoutByKakao(String userId) {
+        Map<String, String> headers = Map.of("Authorization", "KakaoAK " + adminId);
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("target_id_type", "user_id");
+        params.add("target_id", userId.split("_")[1]);
+        return webClientUtil.sendFormPostWithParams(logoutUri, headers, params, HashMap.class);
+    }
+
+    private void unlinkBykakao(UserPayload user) {
+        String kakaoId = user.getUserId().split("_")[1];
+
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "KakaoAK " + adminId);
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("target_id_type", "user_Id");
+        params.add("target_id", kakaoId);
+
+        webClientUtil.sendFormPostWithParams(unlinkUri, headers, params, HashMap.class);
     }
 
     private String getCertificationNumber() {

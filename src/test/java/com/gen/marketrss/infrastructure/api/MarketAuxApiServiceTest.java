@@ -11,8 +11,4 @@ class MarketAuxApiServiceTest {
     @Autowired
     MarketAuxApiService marketAuxApiService;
 
-    @Test
-    void getNewsLetters() {
-        marketAuxApiService.getNewsLetters();
-    }
 }

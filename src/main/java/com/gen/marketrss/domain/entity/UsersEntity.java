@@ -45,5 +45,4 @@ public class UsersEntity {
                 .send_kakao(send_kakao)
                 .build();
     }
-
 }

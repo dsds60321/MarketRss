@@ -65,11 +65,11 @@ public class JwtProvider {
     }
 
     public String generateAccessToken(String userId) {
-        return create(userId, Date.from(Instant.now().plus(accessTimeout, ChronoUnit.HOURS)));
+        return create(userId, Date.from(Instant.now().plus(accessTimeout, ChronoUnit.SECONDS)));
     }
 
     public String generateRefreshToken(String userId) {
-        return create(userId, Date.from(Instant.now().plus(refreshTimeout, ChronoUnit.DAYS)));
+        return create(userId, Date.from(Instant.now().plus(refreshTimeout, ChronoUnit.SECONDS)));
     }
 
     private String create(String userId, Date expiredDate) {
@@ -92,6 +92,6 @@ public class JwtProvider {
     }
 
     public String getRefreshRedisKey(String userId) {
-        return userId + "_refreshToken";
+        return userId + "_REFRESH_TOKEN";
     }
 }

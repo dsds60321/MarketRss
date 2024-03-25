@@ -1,5 +1,6 @@
 package com.gen.marketrss.interfaces.service.implement;
 
+import com.gen.marketrss.domain.entity.StockEntity;
 import com.gen.marketrss.domain.entity.UsersEntity;
 import com.gen.marketrss.infrastructure.common.util.RedisUtil;
 import com.gen.marketrss.infrastructure.repository.StockRepository;
@@ -31,7 +32,11 @@ public class EditServiceImplement implements EditService{
         StockResponseDto stockResponseDto = null;
         try {
             userPayload = redisUtil.get(userId, UserPayload.class);
-            stockResponseDto = stockRepository.findByUserId(userId).toDto();
+            StockEntity stockEntity = stockRepository.findByUserId(userId);
+
+            if (stockEntity != null) {
+                stockResponseDto = stockEntity.toDto();
+            }
 
             if (userPayload == null) {
                 userPayload = usersRepository.findByUserId(userId).toPayload();

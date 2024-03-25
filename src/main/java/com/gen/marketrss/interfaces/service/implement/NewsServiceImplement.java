@@ -1,5 +1,6 @@
 package com.gen.marketrss.interfaces.service.implement;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gen.marketrss.domain.news.News;
 import com.gen.marketrss.infrastructure.common.util.RedisUtil;
 import com.gen.marketrss.interfaces.dto.response.news.NewsResponseDto;
@@ -32,13 +33,19 @@ public class NewsServiceImplement implements NewsService {
 
         for (String key : keys) {
             News news = redisUtil.get(key, News.class);
+
+            try {
+                log.info("news Data : {} " , new ObjectMapper().writeValueAsString(news));
+            } catch (Exception e ) {
+                e.printStackTrace();
+            }
             if (news != null) {
                 newsList.addAll(news.getNewsPayloads());
             }
         }
 
         if (newsList.isEmpty()) {
-            return NewsResponseDto.validationFail();
+            return NewsResponseDto.success(null, 0);
         }
 
         return NewsResponseDto.success(getNewsPaging(newsList, page, size), newsList.size());

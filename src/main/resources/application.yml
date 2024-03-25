@@ -52,8 +52,9 @@ spring:
           kakao:
             client-id: 822a4e53b28bbdac877388e2efd17eb5
             client-secret: iiBxfEYAMftpPzHy0G1rBJoWoVye7dj2
-            redirect_uri: "{baseUrl}/oauth2/kakao"
-            authorizationGrant-type: authorization_code
+            redirect_uri: "{baseUrl}/oauth2/callback/{registrationId}"
+            authorization-grant-type: authorization_code
+            client-authentication-method: client_secret_post
             scope:
               - profile_nickname
               - profile_image
@@ -61,15 +62,16 @@ spring:
           kakao:
             authorization-uri: https://kauth.kakao.com/oauth/authorize
             token-uri: https://kauth.kakao.com/oauth/token
-            user-info-uri: https://kauth.kakao.com/v2/user/me
+            user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
 # JWT Secret key
 jwt:
   secret: bWFya2V0UnNzX3NlY3JldEtleV9naGthbmdfdG95X3Byb2plY3Rfand0VG9rZW4=
-  access-time: 1 # 1H
-  refresh-time: 7 # 7D
+  access-time: 3600 # 1H
+  refresh-time: 604800 # 7D
 
 host: http://localhost:8080
+client: http://localhost:3000
 # image upload
 img:
   upload : /src/main/resources/static/images/
@@ -92,15 +94,17 @@ etf:
 
 kakao:
   token:
-    rest: 822a4e53b28bbdac877388e2efd17eb5
+    clientId: 822a4e53b28bbdac877388e2efd17eb5
+    clientSecret: iiBxfEYAMftpPzHy0G1rBJoWoVye7dj2
+    adminId: 2de5d9efa8e753926212d913819bea82
   api:
     message:
       default-me: https://kapi.kakao.com/v2/api/talk/memo/default/send
       custom-me: https://kapi.kakao.com/v2/api/talk/memo/send
       friends: https://kapi.kakao.com/v1/api/talk/friends/message/send
-    auth: https://kauth.kakao.com/oauth/authorize
-    token: https://kauth.kakao.com/oauth/token
-  redirect-uri: http://localhost:8080/oauth
+    auth:
+      logout: https://kapi.kakao.com/v1/user/logout
+      unlink: https://kapi.kakao.com/v1/user/unlink
 
 korea-invest:
   key:

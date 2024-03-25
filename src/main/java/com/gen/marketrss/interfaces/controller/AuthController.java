@@ -2,18 +2,15 @@ package com.gen.marketrss.interfaces.controller;
 
 import com.gen.marketrss.interfaces.dto.payload.UserPayload;
 import com.gen.marketrss.interfaces.dto.request.auth.*;
-import com.gen.marketrss.interfaces.dto.response.ResponseDto;
 import com.gen.marketrss.interfaces.dto.response.auth.*;
 import com.gen.marketrss.interfaces.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -51,5 +48,10 @@ public class AuthController {
     @PostMapping("/refresh-token")
     public ResponseEntity<? super TokenResponseDto> refreshToken(@RequestBody @Valid TokenRequestDto requestBody,@AuthenticationPrincipal UserPayload user) {
         return authService.refreshToken(user.getUserId(), requestBody);
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<? super SignInResponseDto> logout(@AuthenticationPrincipal UserPayload user) {
+        return authService.logout(user);
     }
 }

@@ -35,10 +35,11 @@ public class WebClientUtil {
         return request.exchangeToMono(response -> response.bodyToMono(returnClass)).block();
     }
 
-    public <T> T sendFormPostWithParams(String uri, MultiValueMap<String,String> params, Class<T> returnClass) {
+    public <T> T sendFormPostWithParams(String uri, Map<String,String> headers, MultiValueMap<String,String> params, Class<T> returnClass) {
         return WebClient.builder().baseUrl(uri)
                 .build().post()
                 .uri(uriBuilder -> uriBuilder.queryParams(params).build())
+                .headers(httpHeaders -> httpHeaders.setAll(headers))
                 .contentType(APPLICATION_FORM_URLENCODED)
                 .accept(MediaType.APPLICATION_JSON)
                 .acceptCharset(UTF_8)

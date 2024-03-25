@@ -32,6 +32,10 @@ public class RedisUtil {
         return clazz.cast(redisTemplate.opsForValue().get(key));
     }
 
+    public void delete(String key) {
+        redisTemplate.delete(key);
+    }
+
     public Set<String> findByKeysRedisPattern(RedisTemplate<String, ?> redisTemplate, String pattern) {
         Set<String> keys = new HashSet<>();
         redisTemplate.execute((RedisConnection connection) -> {
