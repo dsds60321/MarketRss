@@ -151,3 +151,42 @@ https://velog.io/@chuu1019/Access-Token%EA%B3%BC-Refresh-Token%EC%9D%B4%EB%9E%80
 
 ### @ModelAttribute
 * GET 요청에서 쿼리 파라미터나 POST 요청에서 form 데이터를 Java 객체로 바인딩할 때 사용됩니다. 이 어노테이션은 요청 파라미터를 객체의 필드와 자동으로 매핑해줍니다. 따라서 복잡한 객체 구조를 가진 JSON이나 XML 처리에는 적합하지 않고, 주로 폼 데이터를 처리할 때 사용됩니다.
+
+~~~java
+@Bean
+    protected SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
+
+        httpSecurity
+                .cors(cors -> cors
+                        .configurationSource(corsConfigurationSource())
+                )
+                .csrf(CsrfConfigurer::disable)
+                .httpBasic(HttpBasicConfigurer::disable)
+                .sessionManagement(sessionManageMent -> sessionManageMent
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers( "/api/v1/auth/**", "/oauth2/**").permitAll()
+//                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // <- 이건 안되고
+//                        .requestMatchers("/sign-up", "/sign-in").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .oauth2Login(oauth2 -> oauth2.
+                                authorizationEndpoint(endpoint -> endpoint.baseUri("/api/v1/auth/oauth2"))
+                                .redirectionEndpoint(endpoint -> endpoint.baseUri("/oauth2/callback/*"))
+                                .userInfoEndpoint(endpoint -> endpoint.userService(oAuth2UserService))
+                                .successHandler(oAuth2SuccessHandler)
+                        )
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint(new FailedAuthenticationEntryPoint()))
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return httpSecurity.build();
+    }
+
+// 이렇게 해야 되고 
+@Bean
+public WebSecurityCustomizer webSecurityCustomizer() {
+    return (web) -> web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations()).anyRequest();
+}
+~~~

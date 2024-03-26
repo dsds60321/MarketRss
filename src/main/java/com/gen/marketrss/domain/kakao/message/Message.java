@@ -25,7 +25,7 @@ public class Message implements Serializable {
         @Serial
         private static final long serialVersionUID = 1L;
 
-        private String objectType = "list";
+        private String objectType;
         private String headerTitle;
         private Link headerLink;
         @JsonProperty("contents")

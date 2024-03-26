@@ -1,4 +1,7 @@
 spring:
+  mvc:
+    path match:
+      matching-strategy: ant_path_matcher
   datasource:
     url: jdbc:h2:tcp://localhost/~/news
     driver-class-name: org.h2.Driver
@@ -65,6 +68,7 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
+
 # JWT Secret key
 jwt:
   secret: bWFya2V0UnNzX3NlY3JldEtleV9naGthbmdfdG95X3Byb2plY3Rfand0VG9rZW4=
@@ -72,7 +76,6 @@ jwt:
   refresh-time: 604800 # 7D
 
 host: http://localhost:8080
-client: http://localhost:3000
 # image upload
 img:
   upload : /src/main/resources/static/images/
@@ -111,3 +114,6 @@ korea-invest:
   key:
     open: PSXjfjX4UNCeWS5dD3NOB6KngQeXOmokOtul
     secret: 4dhHIwSuuVV+jjs/G7y6h47CGWCWy49rK2zmMRnu12d/PTOIbB+03bw7HOWHwMUeNH4Wd7XPWv4gXrAUgivyrlMyQiKtEBrsoljAuX6kwaIhw9mZX+hyDyF9NeaeG/CVN8eewC3/7M+o85i3BB5cIA0KFfrQJ0jALiKp/LQrG1HBjc/X2Dg=
+logging:
+  level:
+    com.tutorial: debug
