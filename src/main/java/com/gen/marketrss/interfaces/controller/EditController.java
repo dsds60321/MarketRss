@@ -27,11 +27,6 @@ public class EditController {
 
     @PostMapping
     public ResponseEntity<? super EditResponseDto> editByPut(@RequestBody @Valid UserPayload userPayload) {
-        try {
-            log.info("userData : {} " , new ObjectMapper().writeValueAsString(userPayload));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return editService.putUserDetailData(userPayload);
     }
 

@@ -198,10 +198,10 @@ public class AuthServiceImplement implements AuthService {
 
             accessToken = jwtProvider.generateAccessToken(userId);
             refreshToken = jwtProvider.generateRefreshToken(userId);
-            stringRedisTemplate.opsForValue().set(jwtProvider.getRefreshRedisKey(userId), refreshToken, refreshTimeout , TimeUnit.DAYS);
+            stringRedisTemplate.opsForValue().set(jwtProvider.getRefreshRedisKey(userId), refreshToken, refreshTimeout , TimeUnit.SECONDS);
 
             // user 정보 redis 저장
-            redisUtil.set(userId, usersEntity.toPayload(), Duration.ofDays(refreshTimeout));
+            redisUtil.set(userId, usersEntity.toPayload(), Duration.ofSeconds(refreshTimeout));
 
         } catch (Exception e ) {
             e.printStackTrace();
@@ -254,6 +254,7 @@ public class AuthServiceImplement implements AuthService {
 
             if (user.getType().equals("kakao")) {
                 logoutByKakao(userId);
+                unlinkBykakao(userId);
             }
 
             redisUtil.delete(jwtProvider.getRefreshRedisKey(userId));

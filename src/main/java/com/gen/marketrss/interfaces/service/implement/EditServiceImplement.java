@@ -63,6 +63,11 @@ public class EditServiceImplement implements EditService{
         try {
             UsersEntity userEntity = usersRepository.findByUserId(userPayload.getUserId());
             if (userEntity != null) {
+
+                if (userPayload.getSend_email().equalsIgnoreCase("n")) {
+                    userPayload.updateEmailBySelectNo();
+                }
+
                 userEntity.update(userPayload);
                 redisUtil.set(userEntity.getUserId(), userEntity.toPayload());
             } else {

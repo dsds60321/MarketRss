@@ -31,11 +31,7 @@ public class UsersEntity {
     private String type;
     private String role;
     private String kakao_token;
-    @Column(nullable = false)
-    @ColumnDefault("Y")
     private String send_email;
-    @Column(nullable = false)
-    @ColumnDefault("N")
     private String send_kakao;
 
     public UserPayload toPayload() {

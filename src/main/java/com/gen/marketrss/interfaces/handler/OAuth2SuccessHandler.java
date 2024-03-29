@@ -50,7 +50,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         stringRedisTemplate.opsForValue().set(jwtProvider.getRefreshRedisKey(userId), refreshToken, refreshTimeout , TimeUnit.SECONDS);
 
-        redisUtil.set(userId, usersEntity.toPayload(), Duration.ofDays(refreshTimeout));
+        redisUtil.set(userId, usersEntity.toPayload(), Duration.ofSeconds(refreshTimeout));
 
         response.sendRedirect("/auth/oauth-response?accessToken=" + accessToken +"&refreshToken=" + refreshToken);
     }

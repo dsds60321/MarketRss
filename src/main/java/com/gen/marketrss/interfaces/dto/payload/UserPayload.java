@@ -24,4 +24,16 @@ public class UserPayload implements Serializable {
     private String role;
     private String send_kakao;
     private String send_email;
+
+    private void setEmail(String email) {
+        this.email = email;
+    }
+
+    // No버튼일 경우 이메일 지우기
+    public void updateEmailBySelectNo() {
+        if (this.send_email.equalsIgnoreCase("n")) {
+            setEmail("");
+        }
+    }
+
 }
