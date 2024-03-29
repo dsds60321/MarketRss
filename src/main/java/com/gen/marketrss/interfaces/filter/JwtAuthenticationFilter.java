@@ -26,6 +26,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 @Component
@@ -40,6 +41,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
+            if (request.getHeader("Accept").contains("text/html")) {
+                request.getRequestDispatcher("/index.html").forward(request, response);
+                return;
+            }
+
             String token = parseBearerToken(request);
 
             if (token == null) {

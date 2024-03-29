@@ -8,6 +8,6 @@ public class InitController {
 
     @RequestMapping(value = "/**/{[path:[^\\.]*}")
     public String forward() {
-        return "forward:/";
+        return "forward:/index.html";
     }
 }

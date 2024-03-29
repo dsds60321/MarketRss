@@ -5,7 +5,6 @@ import com.gen.marketrss.interfaces.handler.OAuth2SuccessHandler;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -49,7 +48,7 @@ public class WebSecurityConfig {
                 .sessionManagement(sessionManageMent -> sessionManageMent
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/", "/api/v1/auth/**", "/oauth2/**").permitAll()
+                        .requestMatchers("/","index.html","/index.html", "/api/v1/auth/**", "/oauth2/**").permitAll()
                         .requestMatchers("/sign-in", "/sign-up","/api/v1/auth/logout").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -68,7 +67,7 @@ public class WebSecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/index.html","/assets/**","/favicon.*","*.png", "/images/**", "/auth/oauth-response");
+        return (web) -> web.ignoring().requestMatchers("/assets/**","/favicon.*","*.png", "/images/**", "/auth/oauth-response");
     }
 
     @Bean
@@ -78,6 +77,7 @@ public class WebSecurityConfig {
         corsConfiguration.addAllowedOrigin("*");
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);

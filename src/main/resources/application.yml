@@ -1,6 +1,6 @@
 spring:
   mvc:
-    path match:
+    pathmatch:
       matching-strategy: ant_path_matcher
   datasource:
     url: jdbc:h2:tcp://localhost/~/news
@@ -116,4 +116,6 @@ korea-invest:
     secret: 4dhHIwSuuVV+jjs/G7y6h47CGWCWy49rK2zmMRnu12d/PTOIbB+03bw7HOWHwMUeNH4Wd7XPWv4gXrAUgivyrlMyQiKtEBrsoljAuX6kwaIhw9mZX+hyDyF9NeaeG/CVN8eewC3/7M+o85i3BB5cIA0KFfrQJ0jALiKp/LQrG1HBjc/X2Dg=
 logging:
   level:
-    com.tutorial: debug
+    org:
+      springframework:
+        security: DEBUG
