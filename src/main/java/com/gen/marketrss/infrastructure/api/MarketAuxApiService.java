@@ -12,6 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
@@ -115,11 +119,31 @@ public class MarketAuxApiService {
      * @return
      */
     private String thirdPartyImageUpload(String url, String source) {
+        String fileName = "";
+
         try (InputStream in = new URL(url).openStream()) {
-            String fileName = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + source + ".png";
-            String fullPath = System.getProperty("user.dir") + uploadPath + fileName;
-            Path path = Path.of(fullPath);
-            Files.copy(in, path, StandardCopyOption.REPLACE_EXISTING);
+            String uploadPath = System.getProperty("user.dir") + this.uploadPath;
+
+            File directory = new File(uploadPath);
+            boolean isDirectory = directory.isDirectory();
+
+            if (!isDirectory) {
+                isDirectory = directory.mkdir();
+            }
+
+            if (isDirectory) {
+                fileName = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + source + ".png";
+                String fullPath = uploadPath + fileName;
+                Path path = Path.of(fullPath);
+                BufferedImage inputImage = ImageIO.read(in);
+                BufferedImage outputImage = new BufferedImage(800, 600, inputImage.getType());
+                Graphics2D graphics2D = outputImage.createGraphics();
+                graphics2D.drawImage(inputImage, 0, 0, 800, 600, null);
+                graphics2D.dispose();
+                ImageIO.write(outputImage, "png", new File(fullPath));
+//                Files.copy(in, path, StandardCopyOption.REPLACE_EXISTING);
+            }
+
             return "/images/"+ fileName;
         } catch (Exception e) {
             e.printStackTrace();

@@ -5,6 +5,7 @@ import com.gen.marketrss.interfaces.handler.OAuth2SuccessHandler;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -48,8 +49,9 @@ public class WebSecurityConfig {
                 .sessionManagement(sessionManageMent -> sessionManageMent
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/","index.html","/index.html", "/api/v1/auth/**", "/oauth2/**").permitAll()
-                        .requestMatchers("/sign-in", "/sign-up","/api/v1/auth/logout").permitAll()
+                        .requestMatchers("/","/index.html", "/api/v1/auth/**", "/oauth2/**", "/auth/oauth-response").permitAll()
+                        .requestMatchers("/sign-in", "/sign-up","/api/v1/auth/logout",".svg","*.png","/assets/**","/favicon.*").permitAll()
+                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations(), PathRequest.toH2Console()).permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2.
@@ -63,11 +65,6 @@ public class WebSecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
-    }
-
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/assets/**","/favicon.*","*.png", "/images/**", "/auth/oauth-response");
     }
 
     @Bean
