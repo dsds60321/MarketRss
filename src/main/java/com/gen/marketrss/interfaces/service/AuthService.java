@@ -13,7 +13,7 @@ public interface AuthService {
     ResponseEntity<? super SignUpResponseDto> signUp(SignUpRequestDto dto);
     ResponseEntity<? super CheckCertificationResponseDto> checkCertification(CheckCertificationRequestDto dto);
     ResponseEntity<? super SignInResponseDto> signIn (SignInRequestDto dto);
-    ResponseEntity<? super TokenResponseDto> refreshToken (String userId, TokenRequestDto dto);
+    ResponseEntity<? super TokenResponseDto> refreshToken (UserPayload user, TokenRequestDto dto);
 
     ResponseEntity<? super SignInResponseDto> logout(UserPayload userId);
 }

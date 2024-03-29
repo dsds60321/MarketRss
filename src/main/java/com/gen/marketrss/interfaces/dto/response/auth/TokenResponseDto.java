@@ -26,6 +26,6 @@ public class TokenResponseDto extends ResponseDto {
 
     public static ResponseEntity<TokenResponseDto> expiredToken() {
         TokenResponseDto responseBody = new TokenResponseDto(ResponseCode.UN_AUTHORIZED, ResponseMessage.UN_AUTHORIZED);
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(responseBody);
     }
 }

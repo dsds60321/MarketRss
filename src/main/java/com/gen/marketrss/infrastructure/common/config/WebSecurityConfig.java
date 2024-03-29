@@ -89,7 +89,6 @@ public class WebSecurityConfig {
 
     static class FailedAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-
         @Override
         public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);

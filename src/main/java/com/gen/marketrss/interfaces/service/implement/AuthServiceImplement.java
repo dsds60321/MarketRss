@@ -212,7 +212,8 @@ public class AuthServiceImplement implements AuthService {
     }
 
     @Override
-    public ResponseEntity<? super TokenResponseDto> refreshToken(String userId, TokenRequestDto dto) {
+    public ResponseEntity<? super TokenResponseDto> refreshToken(UserPayload user, TokenRequestDto dto) {
+        String userId = user.getUserId();
         String accessToken = "";
 
         try {
@@ -222,7 +223,8 @@ public class AuthServiceImplement implements AuthService {
 
             if (isExpired) {
                 // kakao 계정 연결 끊기
-                if (userId.contains("kakao")) {
+                if (user.getType().equals("kakao")) {
+                    logoutByKakao(userId);
                     unlinkBykakao(userId);
                 }
 

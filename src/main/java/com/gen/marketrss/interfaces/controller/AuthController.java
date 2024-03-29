@@ -47,11 +47,12 @@ public class AuthController {
 
     @PostMapping("/refresh-token")
     public ResponseEntity<? super TokenResponseDto> refreshToken(@RequestBody @Valid TokenRequestDto requestBody,@AuthenticationPrincipal UserPayload user) {
-        return authService.refreshToken(user.getUserId(), requestBody);
+        return authService.refreshToken(user, requestBody);
     }
 
     @GetMapping("/logout")
     public ResponseEntity<? super SignInResponseDto> logout(@AuthenticationPrincipal UserPayload user) {
         return authService.logout(user);
     }
+
 }
