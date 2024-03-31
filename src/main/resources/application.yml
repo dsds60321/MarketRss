@@ -72,10 +72,8 @@ spring:
 # JWT Secret key
 jwt:
   secret: bWFya2V0UnNzX3NlY3JldEtleV9naGthbmdfdG95X3Byb2plY3Rfand0VG9rZW4=
-  access-time: 60 # 1H
-  refresh-time: 120 # 7D
-#  access-time: 3600 # 1H
-#  refresh-time: 604800 # 7D
+  access-time: 3600 # 1H
+  refresh-time: 604800 # 7D
 
 host: http://localhost:8080
 # image upload

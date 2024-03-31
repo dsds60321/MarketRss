@@ -213,6 +213,7 @@ public class AuthServiceImplement implements AuthService {
 
     @Override
     public ResponseEntity<? super TokenResponseDto> refreshToken(UserPayload user, TokenRequestDto dto) {
+        log.info("accessToken : {} \n refreeshToken : {} ", dto.getAccessToken(), dto.getRefreshToken());
         String userId = user.getUserId();
         String accessToken = "";
 
