@@ -16,6 +16,7 @@
 * SpringBoot
 * MariaDB
 * Redis
+* JPA
 * Webflux
 * SpringSecurity
 * OAuth 2.0
