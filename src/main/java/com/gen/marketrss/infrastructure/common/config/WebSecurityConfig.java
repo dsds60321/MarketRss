@@ -50,7 +50,7 @@ public class WebSecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/","/index.html", "/api/v1/auth/**", "/oauth2/**", "/auth/oauth-response").permitAll()
-                        .requestMatchers("/sign-in", "/sign-up","/logout","*.svg","*.png","/assets/**","/favicon.*").permitAll()
+                        .requestMatchers("/sign-in", "/sign-up","/logout","*.svg","*.png","/assets/**","/favicon.*", "/images/**").permitAll()
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations(), PathRequest.toH2Console()).permitAll()
                         .anyRequest().authenticated()
                 )
